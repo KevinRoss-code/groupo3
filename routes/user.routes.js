@@ -17,5 +17,22 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     controller.userBoard
   );
+  
+  let router = require("express").Router();
+  
+  app.get("/:id",
+  [authJwt.verifyToken],
+  controller.findById
+  )
 
+  app.put("/:id",
+  [authJwt.verifyToken],
+  controller.update
+  )
+
+  app.delete("/:id",
+  [authJwt.verifyToken],
+  controller.delete
+  )
+  app.use("/api/user", router);
 };

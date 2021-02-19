@@ -24,7 +24,22 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require("../models/user.model")(sequelize, Sequelize);
+db.users = require("./user.model")(sequelize, Sequelize);
+db.articles = require ('./article.model')(sequelize, Sequelize);
+db.commentaires = require('./commentaire.model')(sequelize, Sequelize);
 
+//user to article
+db.users.hasMany(db.articles, { as: "articles"});
+db.articles.belongsTo(db.users, {
+  foreignKey: "userId",
+  as: "user",
+})
+
+//article to commentaire
+db.articles.hasMany(db.commentaires, {as: "commentaire"});
+db.commentaires.belongsTo(db.articles, {
+  foreignKey: "articleId",
+  as: "article",
+});
 
 module.exports = db;

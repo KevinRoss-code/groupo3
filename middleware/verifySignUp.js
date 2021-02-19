@@ -1,5 +1,5 @@
 const db = require('../models');
-const User = db.user;
+const User = db.users;
 
 userExisteDeja = (req, res, next) => {
     User.findOne({

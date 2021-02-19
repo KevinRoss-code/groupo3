@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 
 const db = require('./models');
 
+
 db.sequelize.sync({force: true}).then(() => {
     console.log("sync db");
 });
@@ -30,6 +31,7 @@ db.sequelize.sync({force: true}).then(() => {
 //routes
 require("./routes/auth.routes")(app);
 require('./routes/user.routes')(app);
+require('./routes/article.routes')(app)
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
