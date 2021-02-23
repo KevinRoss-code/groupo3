@@ -23,9 +23,14 @@ app.get("/", (req, res) => {
 
 const db = require('./models');
 
-
+/*
 db.sequelize.sync({force: true}).then(() => {
     console.log("sync db");
+});¨
+*/
+
+db.sequelize.sync().then(() => {
+  console.log("sync db");
 });
 
 //routes

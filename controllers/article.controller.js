@@ -13,7 +13,6 @@ exports.create = (req, res) => {
     const article = {
         title: req.body.title,
         content: req.body.content,
-        datePublication: req.body.datePublication ? req.body.datePublication : false
     };
     Article.create(article)
     .then((article) => {

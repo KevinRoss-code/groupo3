@@ -35,11 +35,11 @@ db.articles.belongsTo(db.users, {
   as: "user",
 })
 
-//article to commentaire
+/*//article to commentaire
 db.articles.hasMany(db.commentaires, {as: "commentaire"});
 db.commentaires.belongsTo(db.articles, {
   foreignKey: "articleId",
   as: "article",
-});
+});*/
 
 module.exports = db;

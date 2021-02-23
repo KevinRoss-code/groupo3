@@ -7,9 +7,6 @@ module.exports = (sequelize, DataTypes) => {
         content: {
             type: DataTypes.STRING
         },
-        datePublication: {
-            type: DataTypes.BOOLEAN
-        }
     });
 
     return Article;
