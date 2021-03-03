@@ -1,7 +1,9 @@
 const db = require("../models");
+const userId = require("../middleware/authJwt");
 const Article = db.articles;
 const Commentaire = db.commentaires;
 const Op = db.Sequelize.Op;
+
 
 exports.create = (req, res) => {
     if(!req.body.title){
@@ -10,9 +12,13 @@ exports.create = (req, res) => {
         });
         return;
     }
+    let userId = req.userId;
     const article = {
+        
         title: req.body.title,
         content: req.body.content,
+        userId: userId,
+        
     };
     Article.create(article)
     .then((article) => {
