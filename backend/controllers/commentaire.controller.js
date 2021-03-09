@@ -1,10 +1,9 @@
 const db = require('../models');
-const Article = db.articles;
 const Commentaire = db.commentaires;
 
 exports.create = (req, res) => {
     let userId = req.userId;
-    let articleId = req.articleId;
+    let articleId = req.body.articleId;
     const commentaire = {
         text: req.body.text,
         userId: userId,
