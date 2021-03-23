@@ -38,13 +38,15 @@ export default {
       };
       console.log(data);
       axios
-        .post("http://localhost:3000/api/auth/signin", data, {
+        .post("http://localhost:3000/api/auth/login", data, {
           headers: {
             "Content-Type": "application/json",
           },
         })
         .then((res) => {
           console.log(res.data);
+          localStorage.setItem("user", res.data.accessToken)
+          this.$router.push({ path: "MurAppli" });
         })
         .catch((err) => {
           console.log(err);
