@@ -1,17 +1,17 @@
 <template>
     <div class="appli">
        <!--<img alt="Vue logo" src="../assets/icon-above-font.png">-->
-       <Application/> 
+       <Article/> 
     </div>
 </template>
 
 <script>
-import Application from '@/components/Application.vue'
+import Article from '@/components/Article.vue'
 
 export default {
     name: 'MurAppli',
     components: {
-        Application
+        Article
     }
 }
 </script>

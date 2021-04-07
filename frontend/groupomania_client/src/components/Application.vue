@@ -1,17 +1,22 @@
 <template>
-  <div>
+  <!--<div>
     <form id="article" @submit="pushArticle">
       <label id='champTitle' for="title">Titre:</label>
       <input type="text" v-model="title" name="title" id="title"><br/>
       <input v-model="contenu" name="contenu"><br/>
       <button type="submit" @click="envoyer">Poster</button>
     </form>
-  </div>
+  </div>-->
   
-  <article>
-    <p v-for="item in articles" :key="item">{{item.title}} {{item.contenu}}</p>
+  
+    <article >
+    <p>{{$store.getters.formatArticle}}</p>
+      
     
   </article>
+  
+
+  
  
   
  
@@ -20,20 +25,21 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "Application",
   
   data(){
     return {
-      articles:[
-        {title: "", contenu: ""}
-      ],
+      
+        title: "", contenu: ""
+      
       
       
     };
   },
   methods: {
-    envoyer(e) {
+    /*envoyer(e) {
       e.preventDefault();
       let form = document.getElementById('article');
       let formData = new FormData(form);
@@ -51,13 +57,13 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
-          this.articles.push(res.data);
+          //this.articles.push(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
         
-    },
+    },*/
 
     affichage(){
     axios.get("http://localhost:3000/api/articles", {

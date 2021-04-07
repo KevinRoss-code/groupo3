@@ -1,9 +1,23 @@
-import { createStore } from 'vuex'
 
-export default createStore({
+import Vuex from 'vuex'
+
+
+
+export default new Vuex.Store({
   state: {
+    id : "",
+    title : "",
+    contenu : ""
+  },
+  getters: {
+    formatArticle: state => {
+      return `${state.title} : ${state.contenu}`
+    }
   },
   mutations: {
+    INCREASE_ID(state) {
+      state.id += 1
+    }
   },
   actions: {
   },
