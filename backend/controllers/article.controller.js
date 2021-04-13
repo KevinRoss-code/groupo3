@@ -16,7 +16,7 @@ exports.create = (req, res) => {
     const article = {
         
         title: req.body.title,
-        content: req.body.content,
+        content: req.body.contenu,
         userId: userId,
         
     };

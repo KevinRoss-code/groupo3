@@ -3,7 +3,7 @@ const Commentaire = db.commentaires;
 
 exports.create = (req, res) => {
     let userId = req.userId;
-    let articleId = req.body.articleId;
+    let articleId = req.params.articleId;
     const commentaire = {
         text: req.body.text,
         userId: userId,

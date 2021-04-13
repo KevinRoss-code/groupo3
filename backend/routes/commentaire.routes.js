@@ -8,5 +8,7 @@ module.exports = app => {
 
     router.post("/", [authJwt.verifyToken], commentaires.create);
 
+    router.get("/", [authJwt.verifyToken], commentaires.findById);
+
     app.use("/api/commentaires", router);
 }
