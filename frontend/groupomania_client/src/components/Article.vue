@@ -20,7 +20,7 @@ export default {
     
     methods: {
         
-        mouted () {
+        affichage () {
         axios.get("http://localhost:3000/api/articles", {
             headers: {
                 "Content-type" : "application/json",
@@ -31,9 +31,7 @@ export default {
             
             })
     },
-    beforeMouted(){
-        this.mouted()
-    }
+    
     
     }
     
