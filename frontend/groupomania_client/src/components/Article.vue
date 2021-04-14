@@ -1,11 +1,7 @@
 <template>
-
-
-<button @click="affichage">go</button>
-<div class="ui articles">
+<div id="aa">
     {{articles}}
 </div>
-  <div>Les articles</div>  
 </template>
 
 <script>
@@ -13,24 +9,35 @@
 import axios from 'axios'
 
 export default {
+    
     data () {
         return {
             
-            articles : []
+            articles : null
             
         }
     },
-    props: {
-        id: Number,
-        model: String
-    },
+    
     methods: {
-        affichage () {
-        axios.get("http://localhost:3000/api/articles").then((responce) => {
+        
+        mouted () {
+        axios.get("http://localhost:3000/api/articles", {
+            headers: {
+                "Content-type" : "application/json",
+                'x-access-token' : localStorage.getItem('user')
+            }
+        }).then((responce) => {
             this.articles = responce.data
+            
             })
+    },
+    beforeMouted(){
+        this.mouted()
     }
+    
     }
+    
+
     
 }
 </script>

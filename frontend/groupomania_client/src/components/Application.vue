@@ -26,7 +26,7 @@
 <script>
 import axios from "axios";
 
-export default {
+/*export default {
   name: "Application",
   
   data(){
