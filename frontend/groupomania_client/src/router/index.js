@@ -19,7 +19,8 @@ const routes = [
     path: '/murappli',
     name: 'MurAppli',
     component: () => import(/* webpackChunkName: "murappli" */ '../views/MurAppli.vue')
-  }
+  },
+  
 ]
 
 const router = createRouter({
