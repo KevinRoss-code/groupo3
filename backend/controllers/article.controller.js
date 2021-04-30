@@ -40,11 +40,25 @@ exports.findAll = (req, res) => {
         }
     } : null;
 
-    Article.findAll({
+    /*Article.findAll({
         where: condition, 
         include: [{
             model: Commentaire,
-            as: 'commentaires'
+            as: 'commentaires',
+            include: [{model: Users, as: 'author'}]
+        }],
+    }).then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message
+        });
+    });*/
+    Article.findAll({
+        where: condition, 
+        include: [{
+          all: true,
+          nested: true
         }],
     }).then(data => {
         res.send(data);
@@ -78,7 +92,7 @@ exports.findById = (req, res) => {
             as: "commentaires"
         }]
     }).then((article) => {
-        res.send(tutorial);
+        res.send(article);
     }).catch((err) => {
         console.log("Erreur lors de la recherche de l'article" + err);
     });
