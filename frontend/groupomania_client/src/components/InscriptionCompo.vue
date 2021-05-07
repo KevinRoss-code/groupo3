@@ -19,7 +19,6 @@
 
       <button id="push_connexion">Inscription</button>
     </form>
-    <button>Déjà inscrit</button>
   </div>
 </template>
 
@@ -28,7 +27,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "Inscription",
+  name: "InscriptionCompo",
   props: {
     msg: String,
   },
@@ -120,5 +119,9 @@ input {
   width: 40%;
   margin-left: 70%;
 
+}
+h1{
+  text-align: center;
+  padding-bottom: 2%;
 }
 </style>

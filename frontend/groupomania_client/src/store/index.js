@@ -11,7 +11,7 @@ export default new Vuex.Store({
   },
   getters: {
     formatArticle: state => {
-      return `${state.title} : ${state.contenu}`
+      return `${state.title} : ${state.content}`
     }
   },
   mutations: {
@@ -19,6 +19,7 @@ export default new Vuex.Store({
       state.id += 1
     }
   },
+
   actions: {
   },
   modules: {

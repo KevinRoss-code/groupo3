@@ -1,6 +1,6 @@
 <template>
     <div class="appli">
-       <!--<img alt="Vue logo" src="../assets/icon-above-font.png">-->
+       
        <Articles/> 
        
     </div>
