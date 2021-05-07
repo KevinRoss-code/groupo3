@@ -102,10 +102,9 @@ methods: {
                         authorization: `x-access-token: ${token}`,
                     },
                 };
-                let id = this.article.id
-                console.log(id)
-                this.config = `${id}`
-                axios.delete("http://localhost:3000/api/articles/" + `${id}`, config, {
+                let id = this.article.id;
+                console.log(id);
+                axios.delete("http://localhost:3000/api/articles/:id" + `${id}`, config, {
                 }).then((res) => {
                 console.log(res)
                 }).catch((err) => {
