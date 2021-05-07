@@ -94,7 +94,7 @@ methods: {
                      console.log(err)
                  })
             },
-            supprimer(id) {
+            supprimer() {
                 let token = localStorage.getItem('user');
                 console.log(token)
                 let config = {
@@ -102,9 +102,10 @@ methods: {
                         authorization: `x-access-token: ${token}`,
                     },
                 };
-                // let user = localStorage.getItem('user')
+                let id = this.article.id
+                console.log(id)
                 this.config = `${id}`
-                axios.delete("http://localhost:3000/api/articles/" + [`${id.id}`], config, {
+                axios.delete("http://localhost:3000/api/articles/" + `${id}`, config, {
                 }).then((res) => {
                 console.log(res)
                 }).catch((err) => {
