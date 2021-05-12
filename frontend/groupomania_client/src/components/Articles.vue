@@ -1,22 +1,25 @@
 <template>
   <div>
     <div id="formulaireArticle">
-      <form id="formulaireArticle" @submit="envoi">
+      
+        <form id="formulaireArticle" @submit="envoi">
         <label for="title" id="champs_title">titre :</label>
         <input type="text" name="title" id="title" v-model="title" /><br />
         <label for="contenu" id="champs_contenu">contenu :</label>
         <input type="text" name="contenu" id="contenu" v-model="contenu" /><br/>
         <button>Poster</button>
       </form>
-    </div>
-
-    <div v-for="article in articles" :key="article" id="articles">
+      
+  </div>
+  
+    <article class="articles" v-for="article in articles" :key="article">
       <Article
         :commentaires="article.commentaires"
         :article="article"
         :user="article.user"
+        @get-all="getAll"
       />
-    </div>
+    </article>
   </div>
 </template>
 
@@ -45,6 +48,7 @@ export default {
       .then((response) => {
         this.articles = response.data;
         console.log(response.data);
+        
       });
   },
 
@@ -67,11 +71,26 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
+          this.$emit("get-all");
         })
         .catch((err) => {
           console.log(err);
         });
     },
+   getAll(){
+    axios
+      .get("http://localhost:3000/api/articles/", {
+        headers: {
+          "Content-type": "application/json",
+          "x-access-token": localStorage.getItem("user"),
+        },
+      })
+      .then((response) => {
+        this.articles = response.data;
+        console.log(response.data);
+        this.$emit("get-all");
+      });
+   }
     // envoiCom(e, form) {
     //     e.preventDefault();
     //             console.log
@@ -111,7 +130,7 @@ export default {
     margin-top: 2%;
     margin-bottom: 2%;
 }
-#articles {
+.articles {
     text-align: center;
     border: 1px solid black;
     width: 30%;

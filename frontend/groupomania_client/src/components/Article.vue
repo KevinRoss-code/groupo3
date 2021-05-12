@@ -10,7 +10,8 @@
     </div>
     
     
-    <div v-for="commentaire in commentaires" :key="commentaire" id="commentaire"><p>commentaire: {{commentaire.text}}</p>
+    <div v-for="commentaire in commentaires" :key="commentaire" id="commentaire">
+        <p>commentaire: {{commentaire.text}}</p>
     <p>nom : {{user.name}}</p>
     <p>{{commentaire.createdAt}}</p>
     </div>
@@ -46,17 +47,8 @@ props: {
         type: Object,
         required: true,
     },
-    // envoiCom : {
-    //     type: Function,
-    //     required: true,
-    // },
 },
 methods: {
-    // sendCom(e){
-    //     e.preventDefault();
-    //     let form = document.getElementById("formCommentaire");
-    //     this.envoiCom(e, form)
-    // },
     envoiCom(e) {
         e.preventDefault();
                 let form = document.getElementById("formCommentaire");
@@ -74,7 +66,7 @@ methods: {
                 })
                 .then((res) => {
                     console.log(res.data);
-                    //mettreà jour le state
+                    this.$emit("get-all");
 
                 })
                 .catch((err) => {
@@ -82,7 +74,15 @@ methods: {
                 })
             },
             modifier() {
-                axios.put("http://localhost:3000/api/articles/:id",  {
+                let token = localStorage.getItem('user');
+                console.log(token)
+                let config = {
+                    headers: {
+                       "x-access-token": `${token}`,
+                    },
+                };
+                let id = this.article.id;
+                axios.put("http://localhost:3000/api/articles/" + `${id}`, config,  {
                     header: {
                     "Content-Type": "application/json",
                     'x-access-token' : localStorage.getItem('user')
@@ -99,19 +99,21 @@ methods: {
                 console.log(token)
                 let config = {
                     headers: {
-                        authorization: `x-access-token: ${token}`,
+                       "x-access-token": `${token}`,
                     },
                 };
                 let id = this.article.id;
                 console.log(id);
-                axios.delete("http://localhost:3000/api/articles/:id" + `${id}`, config, {
+                axios.delete("http://localhost:3000/api/articles/" + `${id}`, config, {
                 }).then((res) => {
-                console.log(res)
+                console.log(res);
+                this.$emit("get-all");
                 }).catch((err) => {
                     console.log(err)
                 })
             }
-    }
+            
+    },
 }
     
 
