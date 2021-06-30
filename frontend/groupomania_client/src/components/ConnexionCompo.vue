@@ -2,9 +2,7 @@
   <div>
     <h1>Connexion</h1>
     <form id="connexion" @submit="login">
-      
-        <label for="name" id="champ_name">Nom :</label>
-        <input id="name" v-model="name" type="text" name="name" />
+  
       
 
     
@@ -32,7 +30,6 @@ export default {
       let form = document.querySelector("form");
       let formData = new FormData(form);
       let data = {
-        name: formData.get("name"),
         email: formData.get("email"),
         password: formData.get("password"),
       };
