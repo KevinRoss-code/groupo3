@@ -28,6 +28,7 @@ db.users = require("./user.model")(sequelize, Sequelize);
 db.articles = require ('./article.model')(sequelize, Sequelize);
 db.commentaires = require('./commentaire.model')(sequelize, Sequelize);
 
+
 //user to article
 db.users.hasMany(db.articles, { as: "articles"});
 db.articles.belongsTo(db.users, {
@@ -46,6 +47,14 @@ db.users.hasMany(db.commentaires, {as: "commentaires"});
 db.commentaires.belongsTo(db.users, {
   foreignKey: "userId",
   as: 'user',
-})
+});
+
+// db.users.hasMany(db.role, {as: 'role'});
+// db.role.belongsTo(db.users, {
+//   foreignKey: "userId",
+//   as: "roleId"
+// });
+
+// db.ROLES = ["user", "admin"];
 
 module.exports = db;

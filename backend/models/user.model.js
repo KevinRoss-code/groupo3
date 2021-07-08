@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         job:{
             type: DataTypes.STRING
-        }
+        },
+        // isAdmin: {
+        //     type: DataTypes.BOOLEAN
+        // }
     });
 
     return User;

@@ -39,21 +39,6 @@ exports.findAll = (req, res) => {
             [Op.like]: `%${title}%`
         }
     } : null;
-
-    /*Article.findAll({
-        where: condition, 
-        include: [{
-            model: Commentaire,
-            as: 'commentaires',
-            include: [{model: Users, as: 'author'}]
-        }],
-    }).then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message
-        });
-    });*/
     Article.findAll({
         where: condition, 
         include: [{
@@ -100,8 +85,18 @@ exports.findById = (req, res) => {
 
 exports.update = (req, res) => {
     const id = req.params.id;
+    const article = {
+        
+        title: req.body.data.title,
+        content: req.body.data.contenu,
+        id: req.params.id
+    };
+    console.log(req.body)
+    Article.findOne({ where: {id: id} }).then(function(article) {
+        // console.log(article);
+        });
 
-    Article.update(req.body, {
+    Article.update(article, {
         where: {
             id:id
         }
@@ -116,9 +111,11 @@ exports.update = (req, res) => {
             })
         }
     }).catch(err => {
+        console.log(err);
         res.status(500).send({
             message: "Erreur lors de la modification" + id
         });
+        
     });
 };
 

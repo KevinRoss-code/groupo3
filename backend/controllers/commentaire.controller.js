@@ -20,16 +20,27 @@ exports.create = (req, res) => {
         })
     });
 
-    /*return Commentaire.create({
-        text: commentaire.text,
-        articleId: articleId,
-        userId: userId,
-    }).then((commentaire) => {
-        console.log(`>> Creation d'un commentaire ${JSON.stringify(commentaire, null, 4)}`);
-        return commentaire;
-    }).catch((err)=> {
-        console.log('erreur lors de la création de commentaire ' + err);
-    });*/
+};
+exports.findAll = (req, res) => {
+ const text = req.body.text;
+ let condition = text ? {
+     text: {
+         [Op.like]: `%${text}%`
+     }
+ } : null;
+ Commentaire.findAll({
+     where: condition,
+     include: [{
+         all: true,
+         nested: true
+     }],
+}).then(data => {
+    res.send(data);
+}).catch(err => {
+    res.status(500).send({
+        message: err.message
+    });
+});
 };
 
 exports.findById =(id) => {
@@ -38,5 +49,64 @@ exports.findById =(id) => {
         return commentaire;
     }).catch((err) => {
         console.log("Erreur impossible de voir le commentaire " + err);
+    });
+};
+
+exports.delete = (req, res) => {
+    const id = req.params.id;
+
+    Commentaire.destroy({
+        where: {
+            id:id
+        }
+    }).then(num => {
+        if(num == 1) {
+            res.send({
+                message : "Commentaire bien supprimé"
+            });
+        }else{
+            res.send({
+                message: `Impossible de trouver le commentaire ${id}`
+            });
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({
+            message: "erreur lors de la suppression" + id
+        });
+    });
+};
+
+exports.update = (req, res) => {
+    const id = req.params.id;
+    const commentaire = {
+        
+        text: req.body.data.text,
+        id: req.params.id
+    };
+    console.log(req.body)
+    Commentaire.findOne({ where: {id: id} }).then(function(commentaire) {
+        });
+
+    Commentaire.update(commentaire, {
+        where: {
+            id:id
+        }
+    }).then((num) => {
+        if (num == 1) {
+            res.send({
+                message: "Commentaire est bien modifié"
+            });
+        }else{
+            res.send({
+                message: `Impossible de modier le commentaire ${id}`
+            })
+        }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send({
+            message: "Erreur lors de la modification" + id
+        });
+        
     });
 };

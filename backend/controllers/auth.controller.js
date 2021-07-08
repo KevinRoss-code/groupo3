@@ -1,6 +1,7 @@
 const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.users;
+// const Role = db.role;
 
 const Op = db.Sequelize.Op;
 
@@ -16,6 +17,14 @@ exports.signup = (req, res) => {
     password: bcrypt.hashSync(req.body.password, 8),
     job: req.body.job
   })
+  const imageObjet = JSON.parse(req.body.image);
+  delete imageObjet._id;
+  const image = new Image({
+    ...imageObjet,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  });
+  image.save()
+  .then(() => res.status(201).json({message: 'Objet enregistré'}))
     .then(user => {
       if(!user){
           return res.status(403).send({
@@ -36,7 +45,7 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
   User.findOne({
     where: {
-      name: req.body.name
+      email: req.body.email
     }
   })
     .then(user => {

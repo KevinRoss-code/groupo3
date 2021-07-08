@@ -1,38 +1,20 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller");
+const multer = require('../middleware/multer-config');
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
-    );
-    next();
-  });
+module.exports = app => {
 
-  /*app.get("/api/test/all", controller.allAccess);
-
-  app.get(
-    "/api/test/user",
-    [authJwt.verifyToken],
-    controller.userBoard
-  );
-  */
   let router = require("express").Router();
-  
-  app.get("/",
-  [authJwt.verifyToken],
-  controller.findById
-  )
 
-  app.put("/:id",
-  [authJwt.verifyToken],
-  controller.update
-  )
+   router.get("/",[authJwt.verifyToken], multer, controller.findById);
 
-  app.delete("/:id",
-  [authJwt.verifyToken],
-  controller.delete
-  )
+ // router.get("/",[authJwt.verifyToken],(req, res, next) => {return res.send('hello')});
+
+  router.put("/:id", [authJwt.verifyToken], multer, controller.update);
+
+  router.delete("/:id", [authJwt.verifyToken],controller.delete);
+
   app.use("/api/user", router);
-};
+
+}
+

@@ -1,6 +1,7 @@
 const db = require("../models");
 const User = db.users;
 const Article = db.articles;
+const bcrypt = require('bcryptjs');
 
 
 exports.allAccess = (req, res) => {
@@ -12,8 +13,8 @@ exports.allAccess = (req, res) => {
   };
 
   exports.findById = (req, res) => {
-    const id = req.params.id;
-
+    const id = req.userId;
+    console.log('hello route');
     User.findByPk(id, {
       include: [{
         model: Article,
@@ -28,12 +29,30 @@ exports.allAccess = (req, res) => {
 
   exports.update = (req, res) => {
     const id = req.params.id;
-
-    User.update(req.body, {
+    const user = {
+      name: req.body.data.name,
+      surname: req.body.data.surname,
+      email: req.body.data.email,
+      password: bcrypt.hashSync(req.body.data.password, 8),
+      job: req.body.data.job,
+    };
+    console.log(req.body)
+    User.findOne({ where: {id: id} }).then(function(user) {
+      // console.log(article);
+      });
+    User.update(user, {
       where: {
         id: id
       }
-    }).then((num) => {
+    })
+    const imageObject = req.file ?
+    {
+      ...req.body.user,
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : {...req.body };
+    Image.updateOne({id: req.params.id }, {...imageObject, id: req.params.id})
+    .then(() => res.status(200).json({message: "Objet modifié"}))
+    .then((num) => {
       if(num ==1){
         res.send({
           message: "Utilisateur bien modifié"
