@@ -1,67 +1,90 @@
-// import axios from 'axios';
+import axios from 'axios'
 import Vuex from 'vuex'
 
 
 
 export default new Vuex.Store({
   state: {
-    id: 114,
-    title: "test2",
-    content: "test2",
-    createdAt: "2021-05-31T09:29:09.000Z",
-    updatedAt: "2021-05-31T09:29:09.000Z",
-    userId: 3,
-    commentaires: [
-      {
-          id: 119,
-          text: "Oui",
-          createdAt: "2021-06-29T08:53:14.000Z",
-          updatedAt: "2021-06-29T08:53:14.000Z",
-          articleId: 114,
-          userId: 3
-      },
-      
-  ],
-    user: {
-        id: 3,
-        name: "miura",
-        surname: "kentaro",
-        email: "dr@email.fr",
-        password: "$2a$08$LwEmpa6H0fySjayzaCzQ4eyf0J0d/amqU.5BOdKAOxC4mPnJryvXm",
-        job: "mangaka",
-        createdAt: "2021-05-26T08:55:37.000Z",
-        updatedAt: "2021-06-17T13:37:31.000Z",
-        
-    },
+    articles: [],
   },
   getters: {
-    commentaires: state => {
-      return state;
+    articles: state => {
+      return state.articles
     }
   },
   mutations: {
-    ADD_COMMENTAIRES (state, newCommentaires) {
-      state.commentaires += newCommentaires
+    SET_Articles (state, articles) {
+      state.articles = articles
     }
   },
-
   actions: {
-    updateCommentaire ({commit}, newCommentaires) {
-      commit('ADD_COMMENTAIRES', newCommentaires)
-    }
-    // loadCommentaires ({commit}) {
-    //   axios.get("http://localhost:3000/api/commentaires", {
-    //     headers: {
-    //       "Content-type": "application/json",
-    //       "x-access-token": localStorage.getItem("user"),
-    //     },
-    //   }).then(res => res.data)
-    //   .then(commentaires => {
-    //     console.log(commentaires);
-    //     commit('SET_Commentaires', commentaires)
-    //   })
-    // }
-  },
-  modules: {
+    loadArticles ({commit}) {
+            axios.get("http://localhost:3000/api/articles", {
+              headers: {
+                "Content-type": "application/json",
+                "x-access-token": localStorage.getItem("user"),
+              },
+            }).then(res => res.data)
+            .then(articles => {
+              console.log(articles);
+              commit('SET_Article', articles)
+            })
+          }
   }
 })
+// import axios from 'axios';
+// import Vuex from 'vuex'
+
+
+
+// export default new Vuex.Store({
+//   state: {
+//     articles: []
+//   },
+//   getters: {
+//     commentaires: state => {
+//       return state;
+//     }
+//   },
+//   mutations: {
+//     ADD_COMMENTAIRES(state, newCommentaires) {
+//       console.log(newCommentaires);
+//       let article = state.articles.find(elt => elt.id == newCommentaires.articleId);
+//       if(!article.commentaires){
+//         article.commentaires = [newCommentaires];
+//       }else{
+//         article.commentaires.push(newCommentaires);
+//       }
+      
+      
+//     },
+//     ADD_ARTICLE(state, newArticle) {
+//       state.articles.push(newArticle);
+//     }
+//   },
+
+//   actions: {
+//     addCommentaire ({commit}, newCommentaires) {
+      
+//       commit('ADD_COMMENTAIRES', newCommentaires)
+//     },
+//     addArticle({commit}, newArticle){
+//       commit('ADD_ARTICLE', newArticle);
+//     }
+
+//     loadCommentaires ({commit}) {
+//       axios.get("http://localhost:3000/api/commentaires", {
+//         headers: {
+//           "Content-type": "application/json",
+//           "x-access-token": localStorage.getItem("user"),
+//         },
+//       }).then(res => res.data)
+//       .then(commentaires => {
+//         console.log(commentaires);
+//         commit('SET_Commentaires', commentaires)
+//       })
+//     }
+//   },
+//   modules: {
+//   }
+// })

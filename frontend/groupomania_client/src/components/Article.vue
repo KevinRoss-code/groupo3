@@ -4,7 +4,7 @@
       <p>Titre : {{ article.title }}</p>
       <p>Contenu : {{ article.content }}</p>
       <br />
-      <!-- <p>Auteur: {{ article.user.name}} {{ article.updatedAt }}</p> -->
+      <!-- <p>auteur : {{article.user}}</p> -->
       <button v-on:click="showEditForm">Modifier</button>
       <form v-if="showForm === true" @submit="modifier">
         <label for="title" id="champs_title">titre :</label>
@@ -24,7 +24,7 @@
 </template>
 <script>
 import axios from "axios";
-
+import {mapActions} from "vuex"
 
 export default {
   data() {
@@ -71,10 +71,11 @@ export default {
         .put("http://localhost:3000/api/articles/" + `${id}`, { data }, config)
         .then((res) => {
           console.log(res.data);
-          this.$emit("get-all");
+          this.addArticle(res.data);
         })
         .catch((err) => {
           console.log(err);
+          this.addArticle(data);
         });
     },
     supprimer() {
@@ -91,13 +92,14 @@ export default {
         .delete("http://localhost:3000/api/articles/" + `${id}`, config, {})
         .then((res) => {
           console.log(res);
-          this.$emit("get-all");
+          this.addArticle(res.data);
         })
         .catch((err) => {
           console.log(err);
+          this.addArticle(err);
         });
     },
-    
+    ...mapActions(["addArticle"])
   },
 };
 </script>

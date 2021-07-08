@@ -14,14 +14,8 @@
         <button>Poster</button>
       </form>
    </div>
-  {{title}}<br/>
-  {{content}}<br/>
-  {{createdAt}}<br/>
-  {{updatedAt}}<br/>
-  {{user.name}}<br/>
-  {{user.surname}}
   <Commentaires/>
-    <!-- <article class="articles" v-for="article in articles" :key="article">
+     <article class="articles" v-for="article in articles" :key="article">
       <Article
         :article="article"
         :commentaires="article.commentaires"
@@ -32,33 +26,26 @@
     :article="article.id"
     :commentaires="article.commentaires"
     />   
-     </article> -->
+     </article>
      
   </div>
 </template>
 
 <script>
 import axios from "axios";
-// import Article from "@/components/Article.vue";
+ import Article from "@/components/Article.vue";
  import Commentaires from "@/components/Commentaires.vue";
- import { mapState } from 'vuex';
-
-
-
-
+ import { mapState, mapActions } from 'vuex';
 export default {
    components: {
-    //  Article,
+      Article,
      Commentaires
    },
-  data() {
- 
-      return {
-      articles: [],
-    };
-  },
+   mounted() {
+     this.$store.dispatch('loadArticles')
+   },
   computed: {
-    ...mapState(["title", "content", "createdAt", "updatedAt", "user"])
+    ...mapState(['articles'])
   },
   // created() {
   //   axios
@@ -74,7 +61,6 @@ export default {
         
   //     });
   // },
-
    methods: {
       envoi(e) {
       e.preventDefault();
@@ -94,10 +80,13 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
-          this.getAll();
+          //this.getAll();
+           this.addArticle(res.data);
+         
         })
         .catch((err) => {
           console.log(err);
+           this.addArticle(data);
         });
     },
       
@@ -119,7 +108,7 @@ export default {
    profil(){
       this.$router.push({ path: "Profil" });
    },
-     
+  ...mapActions(['addArticle']) 
   },
 };
 </script>

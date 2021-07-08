@@ -15,17 +15,15 @@
     </div>
 </template>
 <script>
-import {mapState} from 'vuex';
+import {mapActions} from 'vuex';
 import axios from "axios";
+
 export default {
     data() {
     return {
       articles: [],
     };
   },
-  computed: mapState([
-        'commentaires'
-      ]),
   props: {
     articleId: {
       type: Number,
@@ -44,7 +42,6 @@ export default {
     // ...mapActions(["updateCommentaire"])
     envoiCom(e) {
       e.preventDefault();
-
       let form = e.target;
       console.log(form);
       let formData = new FormData(form);
@@ -62,13 +59,13 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
-          
+           this.addCommentaire(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    
+     ...mapActions(['addCommentaire'])
    }
 }
 </script>
