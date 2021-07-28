@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         job:{
             type: DataTypes.STRING
         },
+        imageUrl: {
+            type: DataTypes.STRING
+        },
         // isAdmin: {
         //     type: DataTypes.BOOLEAN
         // }

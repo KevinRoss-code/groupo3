@@ -34,6 +34,9 @@ exports.findAll = (req, res) => {
          all: true,
          nested: true
      }],
+     order: [
+        ['id', 'DESC']
+    ]
 }).then(data => {
     res.send(data);
 }).catch(err => {

@@ -6,23 +6,35 @@ const Op = db.Sequelize.Op;
 
 
 exports.create = (req, res) => {
+    // const imageObject = JSON.parse(req.body.image);
+    // delete imageObject._id;
+    /*const image = new Image({
+        ...imageObject,
+        imageUrl : `${req.protocol}: //${req.get('host')}/images/${req.file.filename}`
+    })
+    image.save()
+    .then(() => res.status(201).json({message: 'image enregistrée'} ))
+    .catch(err => res.status(400).json({err}));
     if(!req.body.title){
         res.status(400).send({
             message: "titre vide"
         });
         return;
-    }
+    }*/
     let userId = req.userId;
     const article = {
         
         title: req.body.title,
         content: req.body.contenu,
         userId: userId,
-        
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        //reprendre exercice pour récuperer image
     };
+
     Article.create(article)
     .then((article) => {
         console.log(`>> Article crée ${JSON.stringify(article, null, 4)}`);
+
         res.send(article);
     }).catch((err) => {
         console.log(">>Erreur lors de la création de l'article:" + err);
@@ -45,6 +57,9 @@ exports.findAll = (req, res) => {
           all: true,
           nested: true
         }],
+        order: [
+            ['id', 'DESC']
+        ]
     }).then(data => {
         res.send(data);
     }).catch(err => {
@@ -89,7 +104,8 @@ exports.update = (req, res) => {
         
         title: req.body.data.title,
         content: req.body.data.contenu,
-        id: req.params.id
+        id: req.params.id,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
     console.log(req.body)
     Article.findOne({ where: {id: id} }).then(function(article) {

@@ -1,12 +1,13 @@
 const { authJwt } = require("../middleware");
 const articles = require('../controllers/article.controller');
+const multer = require('../middleware/multer-config')
 
 module.exports = app => {
     
 
     let router = require("express").Router();
 
-    router.post("/", [authJwt.verifyToken], articles.create);
+    router.post("/", [authJwt.verifyToken],multer, articles.create);
 
     router.get("/", [authJwt.verifyToken], articles.findAll);
 

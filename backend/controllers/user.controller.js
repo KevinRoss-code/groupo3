@@ -35,23 +35,16 @@ exports.allAccess = (req, res) => {
       email: req.body.data.email,
       password: bcrypt.hashSync(req.body.data.password, 8),
       job: req.body.data.job,
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
     console.log(req.body)
     User.findOne({ where: {id: id} }).then(function(user) {
-      // console.log(article);
       });
     User.update(user, {
       where: {
         id: id
       }
     })
-    const imageObject = req.file ?
-    {
-      ...req.body.user,
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : {...req.body };
-    Image.updateOne({id: req.params.id }, {...imageObject, id: req.params.id})
-    .then(() => res.status(200).json({message: "Objet modifié"}))
     .then((num) => {
       if(num ==1){
         res.send({

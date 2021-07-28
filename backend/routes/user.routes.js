@@ -6,7 +6,7 @@ module.exports = app => {
 
   let router = require("express").Router();
 
-   router.get("/",[authJwt.verifyToken], multer, controller.findById);
+   router.get("/",[authJwt.verifyToken], controller.findById);
 
  // router.get("/",[authJwt.verifyToken],(req, res, next) => {return res.send('hello')});
 
