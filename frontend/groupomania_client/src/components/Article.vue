@@ -1,32 +1,48 @@
 <template>
-  <div>
-    <div id="article">
+  <div id="article">
+   <div class="border border-danger rounded">
+<img :src="article.imageUrl" alt="" class="rounded">
       <p>Titre : {{ article.title }}</p>
       <p>Contenu : {{ article.content }}</p>
-      <br />
-      <!-- <p>auteur : {{article.user}}</p> -->
-      <button v-on:click="showEditForm">Modifier</button>
-      <form v-if="showForm === true" @submit="modifier">
-        <label for="title" id="champs_title">titre :</label>
-        <input type="text" name="title" id="title" v-model="title" /><br />
-        <label for="contenu" id="champs_contenu">contenu :</label>
-        <input type="text" name="contenu" id="contenu" v-model="contenu"/><br />
-        <button>Enregistrer</button>
-      </form>
-      <button v-on:click="supprimer">Supprimer</button>
-    </div>
-
-   
+      <p>auteur : {{article.user.name}} {{article.user.surname}}</p>
       
-    
-    
-  </div>
+      <button v-on:click="showEditForm" class="modif btn btn-primary btn-lg">Modifier</button>
+      <form v-if="showForm === true" @submit="modifier">
+        <div class="row">
+          <div class='col-2'>
+            <label for="title" id="champs_title">titre :</label>
+          </div>
+          <div class='col-4'>
+            <input type="text" name="title" id="title" v-model="title" />
+          </div>
+          <div class="col-2">
+            <label for="contenu" id="champs_contenu">contenu :</label>
+          </div>
+          <div class="col-4">
+            <input type="text" name="contenu" id="contenu" v-model="contenu"/>
+          </div>
+          <input type="file" id="file" ref="file" v-on:change="onChangeFileUpload()" />
+        </div>
+        <button class="btn btn-primary btn-lg">Enregistrer</button>
+      </form>
+      <button v-on:click="supprimer" class="btn btn-danger btn-lg">Supprimer</button>
+      <Commentaires
+        :article="article.id"
+        :commentaires="article.commentaires"
+      />
+</div>
+</div>
 </template>
+
 <script>
 import axios from "axios";
-import {mapActions} from "vuex"
+import {mapActions} from "vuex";
+import Commentaires from "@/components/Commentaires.vue";
 
 export default {
+  components: {
+    Commentaires,
+  },
   data() {
     return {
       articles: [],
@@ -53,12 +69,9 @@ export default {
     },
     modifier(e) {
       e.preventDefault();
-
-      let data = {
-        title: this.title,
-        contenu: this.contenu,
-      };
-      console.log(data);
+      let form = document.querySelector("form");
+      let formData = new FormData(form);
+      formData.append("image", this.file);
       let token = localStorage.getItem("user");
       console.log(token);
       let config = {
@@ -68,14 +81,14 @@ export default {
       };
       let id = this.article.id;
       axios
-        .put("http://localhost:3000/api/articles/" + `${id}`, { data }, config)
+        .put("http://localhost:3000/api/articles/" + `${id}`, formData, config)
         .then((res) => {
           console.log(res.data);
-          this.addArticle(res.data);
+          this.loadArticles();
         })
         .catch((err) => {
           console.log(err);
-          this.addArticle(data);
+          this.loadArticles();
         });
     },
     supprimer() {
@@ -92,22 +105,37 @@ export default {
         .delete("http://localhost:3000/api/articles/" + `${id}`, config, {})
         .then((res) => {
           console.log(res);
-          this.addArticle(res.data);
+          this.loadArticles();
         })
         .catch((err) => {
           console.log(err);
-          this.addArticle(err);
+          this.loadArticles();
         });
     },
-    ...mapActions(["addArticle"])
+    onChangeFileUpload() {
+      this.file = this.$refs.file.files[0];
+      console.log(this.file)
+      },
+    ...mapActions(["loadArticles"])
   },
 };
 </script>
 <style scoped>
-#article {
-  border: 1px solid black;
+img{
+  width: 30%;
+  margin-top: 1%;
+  margin-left: 35%;
 }
-#commentaire {
-  border: 1px solid black;
+button{
+  margin: 1%;
+}
+.modif{
+  margin-left: 39%;
+}
+#article{
+  padding: 2%;
+}
+.border{
+ background-color: #f28185;
 }
 </style>

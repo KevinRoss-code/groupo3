@@ -27,7 +27,7 @@ export default new Vuex.Store({
             }).then(res => res.data)
             .then(articles => {
               console.log(articles);
-              commit('SET_Article', articles)
+              commit('SET_Articles', articles)
             })
           }
   }

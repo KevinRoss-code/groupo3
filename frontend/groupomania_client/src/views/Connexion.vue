@@ -1,6 +1,12 @@
 <template>
   <div class="connexion">
-    <!--<img alt="Vue logo" src="../assets/icon-above-font.png">-->
+    <div class="bordereau">
+      
+        <p>Bienvenu sur votre réseau</p>
+    
+      <img alt="Vue logo" src="../assets/icon-above-font.png">
+    
+    </div>
     <ConnexionCompo />
   </div>
 </template>
@@ -16,7 +22,11 @@ export default {
 }
 </script>
 <style scoped>
-img{
-  width: 30%;
+
+.bordereau{
+  border: double #ce323a;
+  margin-left: 20%;
+  margin-right: 20%;
+  padding: 2%;
 }
 </style>

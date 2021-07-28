@@ -1,5 +1,6 @@
 <template>
     <div class="class profilUser">
+        <p>Votre profil utilisateur :</p>
         <ProfilUser/>
     </div>
 </template>
@@ -13,3 +14,9 @@ export default {
     
 }
 </script>
+<style>
+p{
+    font-size: 2rem;
+    text-align: center;
+}
+</style>

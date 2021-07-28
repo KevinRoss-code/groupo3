@@ -1,17 +1,17 @@
 <template>
     <div>
+      
          <form id="formCommentaire" @submit="envoiCom">
-      <label for="text" id="champText">Ajouter un commentaire: </label>
-      <input type="text" name="text" id="text" v-model="text" />
-      <input type="hidden" name="idArticle" :value="articleId" />
-      <button>Ajouter</button>
+           <div class="row">
+        <div class="col-4"><label for="text" id="champText">Ajouter un commentaire: </label></div>
+      
+      <div class="col-5">
+        <input type="text" name="text" id="text" v-model="text" />
+      </div>
+     <input type="hidden" name="idArticle" :value="articleId" />
+      <button class="btn btn-danger btn-lg col-3">Ajouter</button>
+      </div>
     </form>
-  <!-- <form id="formCommentaire" >
-      <label for="text" id="champText">Ajouter un commentaire: </label>
-      <input type="text" name="text" id="text" v-model="text" />
-      <input type="hidden" name="idArticle" :value="articleId" />
-      <button @click="updateCommentaire">Ajouter</button>
-  </form> -->
     </div>
 </template>
 <script>
@@ -39,7 +39,6 @@ export default {
     },
   },
   methods: {
-    // ...mapActions(["updateCommentaire"])
     envoiCom(e) {
       e.preventDefault();
       let form = e.target;
@@ -59,13 +58,13 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
-           this.addCommentaire(res.data);
+           this.loadArticles(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     },
-     ...mapActions(['addCommentaire'])
+     ...mapActions(['loadArticles'])
    }
 }
 </script>

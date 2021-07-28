@@ -1,23 +1,24 @@
 <template>
   <div id="sign">
-    <h1 id="title">Inscription</h1>
+    <h1 id="title">Première connexion ? Inscrivez vous :</h1>
     <form id="form_sign" @submit="inscription">
-      <label for="name" id="champ_name_connexion">Nom :</label>
-      <input id="name_connexion" v-model="name" type="text" name="name" />
-
-      <label for="surname" id="champ_surname_connexion">Prénom :</label>
-      <input id="surname_connexion" v-model="surname" type="text" name="surname" />
-
-      <label for="email" id="champ_email_connexion">Email :</label>
-      <input id="email_connexion" v-model="email" type="text" name="email" />
-
-      <label for="password" id="champ_mdp_connexion">Mot de passe :</label>
-      <input id="password_connexion" v-model="password" type="text" name="password" />
-
-      <label for="job" id="champ_job_connexion">Job :</label>
+      <div class="row">
+        <div class="col-4">
+          <label for="name" id="champ_name_connexion">Nom :</label><br/>
+          <label for="surname" id="champ_surname_connexion">Prénom :</label><br/>
+          <label for="email" id="champ_email_connexion">Email :</label><br/>
+          <label for="password" id="champ_mdp_connexion">Mot de passe :</label><br/>
+          <label for="job" id="champ_job_connexion">Job :</label>
+        </div>
+        <div class="col-6">
+           <input id="name_connexion" v-model="name" type="text" name="name" /><br/>
+          <input id="surname_connexion" v-model="surname" type="text" name="surname" /><br/>
+        <input id="email_connexion" v-model="email" type="text" name="email" /><br/>
+      <input id="password_connexion" v-model="password" type="text" name="password" /><br/>
       <input id="job_connexion" v-model="job" type="text" name="job" />
-
-      <button id="push_connexion">Inscription</button>
+        </div>
+      </div>
+        <button id="push_connexion" class="btn btn-danger btn-lg">Inscription</button>
     </form>
   </div>
 </template>
@@ -64,64 +65,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-input {
-  margin-left: 2%;
-  margin-bottom: 2%;
+label{
+  margin: 2%;
 }
-#form_sign{
-  display: grid;
-  grid-template-columns: 30% 20% 30% 20%;
-  grid-template-rows: auto;
-  margin-left: 30%;
-}
-#champ_name_connexion{
-   grid-column-start: 1;
-  grid-row-start: 2;
-}
-#name_connexion{
-   grid-column-start: 2;
-  grid-row-start: 2;
-}
-#champ_surname_connexion{
-   grid-column-start: 1;
-  grid-row-start: 3;
-}
-#surname_connexion{
-   grid-column-start: 2;
-  grid-row-start: 3;
-}
-#champ_email_connexion{
-   grid-column-start: 1;
-  grid-row-start: 4;
-}
-#email_connexion{
-   grid-column-start: 2;
-  grid-row-start: 4;
-}
-#champ_mdp_connexion{
-   grid-column-start: 1;
-  grid-row-start: 5;
-}
-#password_connexion{
-   grid-column-start: 2;
-  grid-row-start: 5;
-}
-#champ_job_connexion{
-   grid-column-start: 1;
-  grid-row-start: 6;
-}
-#job_connexion{
-   grid-column-start: 2;
-  grid-row-start: 6;
-}
-#push_connexion{
-  grid-row-start: 7;
-  width: 40%;
-  margin-left: 70%;
-
+input{
+  margin: 1%;
 }
 h1{
   text-align: center;
   padding-bottom: 2%;
+  color: rgb(29, 3, 3);
+}
+button{
+  margin-left: 44%;
+  margin-top: 2%;
 }
 </style>

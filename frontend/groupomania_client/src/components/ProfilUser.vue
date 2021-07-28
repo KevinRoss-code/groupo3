@@ -1,32 +1,37 @@
 <template>
     <div>
+        <div class="row">
+          <div class="col-6"><p>{{users.name}}</p></div>
+          <div class="col-6"><p>{{users.surname}}</p></div>
+        </div>
+        <div class="row">
+          <div class="col-6"><p>{{users.email}}</p></div>
+          <div class="col-6"><p>{{users.job}}</p></div>
+        </div>
+      
         
         
-        {{users.name}}
-        {{users.surname}}
-        {{users.email}}
-        {{users.job}}
-        <button v-on:click="showEditForm">Modifier</button>
+        <button v-on:click="showEditForm" class="btn btn-primary btn-lg">Modifier</button>
     <form v-if="showForm === true" @submit="modifier">
-              <label for="name" id="champ_name_connexion">Nom :</label>
-      <input id="name_connexion" v-model="name" type="text" name="name" />
-
-      <label for="surname" id="champ_surname_connexion">Prénom :</label>
-      <input id="surname_connexion" v-model="surname" type="text" name="surname" />
-
-      <label for="email" id="champ_email_connexion">Email :</label>
-      <input id="email_connexion" v-model="email" type="text" name="email" />
-
-      <label for="password" id="champ_mdp_connexion">Mot de passe :</label>
-      <input id="password_connexion" v-model="password" type="text" name="password" />
-
-      <label for="job" id="champ_job_connexion">Job :</label>
-      <input id="job_connexion" v-model="job" type="text" name="job" />
-
-      <input type="file" @change="onFileSelected"/>
-        <button>Enregistrer</button>
-        </form>
-    <button v-on:click="supprimer">Supprimer</button>
+      <div class="row">
+        <div class="class col-2"><label for="name" id="champ_name_connexion">Nom :</label></div>
+        <div class="class col-4"><input id="name_connexion" v-model="name" type="text" name="name" /></div>
+        <div class="class col-2"><label for="surname" id="champ_surname_connexion">Prénom :</label></div>
+        <div class="class col-4"><input id="surname_connexion" v-model="surname" type="text" name="surname" /></div>
+      </div>
+      <div class="class row">
+        <div class="class col-2"> <label for="email" id="champ_email_connexion">Email :</label></div>
+        <div class="class col-4"><input id="email_connexion" v-model="email" type="text" name="email" /></div>
+        <div class="class col-2"><label for="password" id="champ_mdp_connexion">Mot de passe :</label></div>
+        <div class="class col-4"><input id="password_connexion" v-model="password" type="text" name="password" /></div>
+      </div>
+      <div class="class row">
+        <div class="class col-2"><label for="job" id="champ_job_connexion">Job :</label></div>
+        <div class="class col-4"><input id="job_connexion" v-model="job" type="text" name="job" /></div>
+        <div class="class col-2"><input type="file" ref="file" v-on:change="onChangeFileUpload()"/></div>
+        <div class="class col-3"><button class="btn btn-success btn-lg">Enregistrer</button></div>
+      </div>
+    </form>
     </div>
 </template>
 <script>
@@ -58,57 +63,37 @@ export default {
 
         modifier(e) {
                 e.preventDefault();
-    
-     const image = new FormData();
-      image.append('image', this.selectedFile, this.selectedFile.name)
-      let data = {
-        name: this.name,
-        surname: this.surname,
-        email: this.email,
-        password: this.password,
-        job: this.job,
-      };
-        console.log(data)
+    let form = document.querySelector("form");
+     const formData = new FormData(form);
+      formData.append('image', this.file);
+      console.log(formData);
                 let token = localStorage.getItem('user');
                 console.log(token)
                 let config = {
                     headers: {
+                      "Content-Type": "multipart/form-data",
                        "x-access-token": `${token}`,
                     },
                 };
                 let id = this.users.id;
-                axios.put("http://localhost:3000/api/user/" + `${id}`,{data}, image, config  
+                axios.put("http://localhost:3000/api/user/" + `${id}`,formData, config  
                 ).then((res) => {
                     console.log(res.data);
-                     //this.$emit("get-all");
                 })
                  .catch((err) => {
                      console.log(err)
                  })
             },
-            supprimer() {
-                let token = localStorage.getItem('user');
-                console.log(token)
-                let config = {
-                    headers: {
-                       "x-access-token": `${token}`,
-                    },
-                };
-                let id = this.users.id;
-                console.log(id);
-                axios.delete("http://localhost:3000/api/user/" + `${id}`, config, {
-                }).then((res) => {
-                console.log(res);
-                // this.$emit("get-all");
-                }).catch((err) => {
-                    console.log(err)
-                })
-            },
-
-            onfileSelected(event){
-              this.selectedFile =event.target.files[0]
+            onChangeFileUpload(){
+              this.file = this.$refs.file.files[0];
+      console.log(this.file)
             }
     },
 
 }
 </script>
+<style>
+button{
+  margin-left: 50%;
+}
+</style>

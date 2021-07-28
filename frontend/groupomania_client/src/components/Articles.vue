@@ -1,134 +1,96 @@
 <template>
   <div>
-    <button @click="profil">
+    <button class="btn btn-primary btn-lg" @click="profil">
       Voir le profil
     </button>
+    <form class="border border-danger rounded" style="background-color:#f4898d" @submit="envoi">
+      <p>Votre article ici : </p>
+      <div class="class row">
+        <div class="class col-5">
+          <label for="title" id="champs_title">titre :</label><br />
+          <label for="contenu" id="champs_contenu">contenu :</label>
+        </div>
+        <div class="class col-5">
+          <input type="text" name="title" id="title" v-model="title" /><br />
+          <input type="text" name="contenu" id="contenu" v-model="contenu"/><br />
+          <input type="file" id="file" ref="file" v-on:change="onChangeFileUpload()" />
+          <button class="btn btn-danger btn-lg">Poster</button>
+        </div>
+      </div>
+    </form>
 
-      <div id="formulaireArticle">
-      
-        <form id="formulaireArticle" @submit="envoi">
-        <label for="title" id="champs_title">titre :</label>
-        <input type="text" name="title" id="title" v-model="title" /><br />
-        <label for="contenu" id="champs_contenu">contenu :</label>
-        <input type="text" name="contenu" id="contenu" v-model="contenu" /><br/>
-        <button>Poster</button>
-      </form>
-   </div>
-  <Commentaires/>
-     <article class="articles" v-for="article in articles" :key="article">
+  
+    <article class="articles" v-for="article in articles" :key="article">
       <Article
         :article="article"
         :commentaires="article.commentaires"
         :user="article.user"
-        @get-all="getAll"
       />
-        <Commentaires
-    :article="article.id"
-    :commentaires="article.commentaires"
-    />   
-     </article>
-     
+      
+    </article>
   </div>
 </template>
 
 <script>
 import axios from "axios";
- import Article from "@/components/Article.vue";
- import Commentaires from "@/components/Commentaires.vue";
- import { mapState, mapActions } from 'vuex';
+import Article from "@/components/Article.vue";
+import { mapState, mapActions } from "vuex";
 export default {
-   components: {
-      Article,
-     Commentaires
-   },
-   mounted() {
-     this.$store.dispatch('loadArticles')
-   },
-  computed: {
-    ...mapState(['articles'])
+  components: {
+    Article
   },
-  // created() {
-  //   axios
-  //     .get("http://localhost:3000/api/articles", {
-  //       headers: {
-  //         "Content-type": "application/json",
-  //         "x-access-token": localStorage.getItem("user"),
-  //       },
-  //     })
-  //     .then((response) => {
-  //       this.articles = response.data;
-  //       console.log(response.data);
-        
-  //     });
-  // },
-   methods: {
-      envoi(e) {
+  mounted() {
+    this.$store.dispatch("loadArticles");
+  },
+  computed: {
+    ...mapState(["articles"]),
+  },
+  methods: {
+    envoi(e) {
       e.preventDefault();
       let form = document.querySelector("form");
       let formData = new FormData(form);
-      let data = {
-        title: formData.get("title"),
-        contenu: formData.get("contenu"),
-      };
-      console.log(data);
+      formData.append("image", this.file);
+      console.log(this.file);
+      
+      console.log(formData);
       axios
-        .post("http://localhost:3000/api/articles", data, {
+        .post("http://localhost:3000/api/articles", formData, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "x-access-token": localStorage.getItem("user"),
           },
         })
         .then((res) => {
-          console.log(res.data);
-          //this.getAll();
-           this.addArticle(res.data);
-         
+          console.log("res data then", res.data);
+          this.loadArticles();
         })
         .catch((err) => {
           console.log(err);
-           this.addArticle(data);
+  
         });
     },
-      
-   getAll(){
-     console.log("hello")
-    axios
-      .get("http://localhost:3000/api/articles/", {
-        headers: {
-          "Content-type": "application/json",
-          "x-access-token": localStorage.getItem("user"),
-        },
-      })
-      .then((response) => {
-        this.articles = response.data;
-        console.log(response.data);
-        // this.$emit("supprimer", "envoiCom");
-      });
-   },
-   profil(){
+    onChangeFileUpload() {
+      this.file = this.$refs.file.files[0];
+      console.log(this.file)
+    },
+    profil() {
       this.$router.push({ path: "Profil" });
-   },
-  ...mapActions(['addArticle']) 
+    },
+    ...mapActions(["loadArticles"]),
   },
 };
 </script>
 <style>
-#formulaireArticle {
-    text-align: center;
+form{
+  padding: 2%;
+  margin: 2%;
 }
-#title {
-    margin-left: 5%;
+label{
+  margin: 1%;
 }
-#contenu {
-    margin-left: 3.3%;
-    margin-top: 2%;
-    margin-bottom: 2%;
+input{
+  margin: 1%;
 }
-.articles {
-    text-align: center;
-    border: 1px solid black;
-    width: 30%;
-    margin: 2%;
-    margin-left: 35%;
-}
+
 </style>

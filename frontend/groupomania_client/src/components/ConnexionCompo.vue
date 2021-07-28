@@ -1,20 +1,18 @@
 <template>
   <div>
-    <h1>Connexion</h1>
+    <h1>De retour :</h1>
     <form id="connexion" @submit="login">
-  
-      
-
-    
-        <label for="email" id="champ_email">Email :</label>
-        <input id="email" v-model="email" type="text" name="email" />
-      
-      
-        <label for="password" id="champ_mdp">Mot de passe :</label>
-        <input id="password" v-model="password" type="text" name="password" />
-      
-
-      <button>Connexion</button>
+      <div class="row">
+        <div class="col-6">
+          <label for="email" id="champ_email">Email :</label><br />
+          <label for="password" id="champ_mdp">Mot de passe :</label>
+        </div>
+        <div class="col-6">
+          <input id="email" v-model="email" type="text" name="email" />
+          <input id="password" v-model="password" type="text" name="password" />
+        </div>
+      </div>
+        <button class="btn btn-danger btn-lg">Connexion</button>
     </form>
   </div>
 </template>
@@ -42,7 +40,7 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
-          localStorage.setItem("user", res.data.accessToken)
+          localStorage.setItem("user", res.data.accessToken);
           this.$router.push({ path: "MurAppli" });
         })
         .catch((err) => {
@@ -55,46 +53,19 @@ export default {
 </script>
 
 <style scoped>
-#table {
-  text-align: justify;
-  margin-left: 40%;
+label{
+  margin: 2%;
 }
-input {
-  margin-left: 10%;
-  align-items: flex-start;
-   margin-bottom: 10%;
+input{
+  margin: 1%;
 }
-#connexion{
-    display: grid;
-    grid-template-columns: 50% 20%;
-    grid-template-rows: auto;
+h1{
+  text-align: center;
+  padding-bottom: 2%;
+  color: red;
 }
-#champ_name {
-  grid-column-start: 1;
-  grid-row-start: 1;
-}
-#name {
-  grid-column-start: 2;
-  grid-row-start: 1;
-}
-#champ_email {
-  grid-column-start: 1;
-  grid-row-start: 2;
-}
-#email {
-  grid-column-start: 2;
-  grid-row-start: 2;
-}
-#champ_mdp {
-  grid-column-start: 1;
-  grid-row-start: 3;
-}
-#password {
-  grid-column-start: 2;
-  grid-row-start: 3;
-}
-button {
-  grid-column-start: 2;
-  grid-row-start: 4;
+button{
+  margin-left: 61%;
+  margin-top: 2%;
 }
 </style>

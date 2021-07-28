@@ -1,6 +1,14 @@
 <template>
   <div class="inscription">
-    <img alt="Vue logo" src="../assets/icon-above-font.png">
+    <div class="bordereau">
+      
+        <p>Bienvenu sur votre réseau</p>
+    
+      <img alt="Vue logo" src="../assets/icon-above-font.png">
+    
+    </div>
+    
+    
     <InscriptionCompo />
   </div>
 </template>
@@ -18,8 +26,28 @@ export default {
 </script>
 
 <style>
+.inscription{
+  background-color: #f4898d;
+}
+.bordereau{
+  border: double #32a1ce;
+  margin-left: 20%;
+  margin-right: 20%;
+  padding: 2%;
+  background-color: white;
+}
+p{
+  font-size: 2rem;
+  text-align: center;
+}
+form{
+  margin-left: 10%;
+  font-size: 1.5rem;
+  margin-bottom: 5%;
+  padding-bottom: 5%;
+}
 img {
-  width: 30%;
-  padding-left: 35%;
+  width: 40%;
+  margin-left: 30%;
 }
 </style>
