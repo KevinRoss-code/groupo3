@@ -27,17 +27,17 @@ const db = require('./models');
 const Role = db.role;
 
 
-// db.sequelize.sync({force: true}).then(() => {
-//     console.log("sync db");
+db.sequelize.sync({force: true}).then(() => {
+    console.log("sync db");
     
-// });
+});
 
 
 
- db.sequelize.sync().then(() => {
-   console.log("sync db");
-  //  initial();
-   });
+//  db.sequelize.sync().then(() => {
+//    console.log("sync db");
+//   //  initial();
+//    });
    
 
 // function initial() {
