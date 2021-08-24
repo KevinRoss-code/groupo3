@@ -2,6 +2,7 @@ const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/auth.controller");
 const multer = require("../middleware/multer-config");
 
+
 module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(
@@ -12,7 +13,7 @@ module.exports = function(app) {
   });
 
   app.post(
-    "/api/auth/signup", [verifySignUp.userExisteDeja], multer, controller.signup);
+    "/api/auth/signup", [verifySignUp.userExisteDeja, verifySignUp.checkUser, verifySignUp.valid], multer, controller.signup);
 
-  app.post("/api/auth/login", controller.login);
+  app.post("/api/auth/login", [verifySignUp.valid], controller.login);
 };

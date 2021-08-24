@@ -8,8 +8,6 @@ module.exports = app => {
 
    router.get("/",[authJwt.verifyToken], controller.findById);
 
- // router.get("/",[authJwt.verifyToken],(req, res, next) => {return res.send('hello')});
-
   router.put("/:id", [authJwt.verifyToken], multer, controller.update);
 
   router.delete("/:id", [authJwt.verifyToken],controller.delete);
