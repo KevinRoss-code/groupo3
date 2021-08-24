@@ -3,6 +3,7 @@ const userId = require("../middleware/authJwt");
 const Article = db.articles;
 const Commentaire = db.commentaires;
 const Op = db.Sequelize.Op;
+const fs = require('fs');
 
 
 exports.create = (req, res) => {
@@ -100,12 +101,14 @@ exports.findById = (req, res) => {
 
 exports.update = (req, res) => {
     const id = req.params.id;
+    console.log(req.body)
     const article = {
         
-        title: req.body.data.title,
-        content: req.body.data.contenu,
+        title: req.body.title,
+        content: req.body.contenu,
         id: req.params.id,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        
     };
     console.log(req.body)
     Article.findOne({ where: {id: id} }).then(function(article) {
@@ -117,6 +120,8 @@ exports.update = (req, res) => {
             id:id
         }
     }).then((num) => {
+        try {
+            if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
         if (num == 1) {
             res.send({
                 message: "Article est bien modifié"
@@ -126,6 +131,11 @@ exports.update = (req, res) => {
                 message: `Impossible de modier l'article ${id}`
             })
         }
+    }catch{
+        res.status(403).send({
+            message: "Acces Refuse"
+    })
+}   
     }).catch(err => {
         console.log(err);
         res.status(500).send({
@@ -137,12 +147,49 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
     const id = req.params.id;
+    Article.findByPk(id)
+    .then(article => {
+        try {
 
+      
+        if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
+
+        if(article.imageUrl){
+            const filename = article.imageUrl.split("/images")[1];
+            fs.unlink(`images/${filename}`, () => {
+                Article.destroy({ where: {id: id} }).then(num => {
+        
+                    if(num == 1) {
+                        res.send({
+                            message : "Article bien supprimé"
+                        });
+                    }else{
+                        res.send({
+                            message: `Impossible de trouver l'article ${id}`
+                        });
+                    }
+                }).catch(err => {
+                    res.status(500).send({
+                        message: "erreur lors de la suppression" + id
+                    });
+                });
+            })
+        } 
+    }catch  {
+        res.status(403).send({
+            message: "Acces Refuse"
+        });
+    }
+    })
+    
+    /*
     Article.destroy({
         where: {
             id:id
         }
+        
     }).then(num => {
+        
         if(num == 1) {
             res.send({
                 message : "Article bien supprimé"
@@ -156,7 +203,7 @@ exports.delete = (req, res) => {
         res.status(500).send({
             message: "erreur lors de la suppression" + id
         });
-    });
+    });*/
 };
 
 exports.deleteAll = (req, res) => {

@@ -19,9 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         imageUrl: {
             type: DataTypes.STRING
         },
-        // isAdmin: {
-        //     type: DataTypes.BOOLEAN
-        // }
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        }
     });
 
     return User;

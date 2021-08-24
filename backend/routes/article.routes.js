@@ -15,9 +15,9 @@ module.exports = app => {
 
     router.get("/:id", [authJwt.verifyToken], articles.findById);
 
-    router.put("/:id", [authJwt.verifyToken], articles.update);
+    router.put("/:id", [authJwt.verifyToken],  [authJwt.authorized], multer, articles.update);
 
-    router.delete("/:id", [authJwt.verifyToken], articles.delete);
+    router.delete("/:id", [authJwt.verifyToken], [authJwt.authorized], multer, articles.delete);
 
     router.delete('/', [authJwt.verifyToken] ,articles.deleteAll);
 

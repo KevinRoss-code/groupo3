@@ -66,7 +66,7 @@ exports.login = (req, res) => {
         
       }
       
-
+        
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400 // 24 hours
       });
@@ -76,7 +76,8 @@ exports.login = (req, res) => {
         name: user.name,
         surname: user.surname,
         email: user.email,
-        accessToken: token
+        accessToken: token,
+        isAdmin: user.isAdmin
       });
 })
     .catch(err => {

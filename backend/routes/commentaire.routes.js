@@ -12,9 +12,9 @@ module.exports = app => {
 
     router.get("/", [authJwt.verifyToken], commentaires.findById);
 
-    router.delete("/:id", [authJwt.verifyToken], commentaires.delete);
+    router.delete("/:id", [authJwt.verifyToken], [authJwt.authorized], commentaires.delete);
 
-    router.put("/:id", [authJwt.verifyToken], commentaires.update);
+    router.put("/:id", [authJwt.verifyToken],[authJwt.authorized], commentaires.update);
 
     app.use("/api/commentaires", router);
 }

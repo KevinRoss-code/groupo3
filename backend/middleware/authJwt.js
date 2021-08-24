@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require('../config/auth.config');
 const db = require("../models");
-const User = db.User;
+const User = db.users;
 
 verifyToken = (req, res, next) => {
     let token = req.headers["x-access-token"];
@@ -22,6 +22,13 @@ verifyToken = (req, res, next) => {
         next();
     });
 };
+authorized = (req, res, next) =>{
+
+    User.findByPk(req.userId).then(user => {
+        req.isAdmin = user.isAdmin
+        next();
+    })
+}
 
 // isAdmin = (req, res, next) => {
 //     User.findByPk(req.userId).then(user => {
@@ -43,6 +50,7 @@ verifyToken = (req, res, next) => {
 
 const authJwt = {
     verifyToken: verifyToken,
+    authorized: authorized
     // isAdmin: isAdmin
 };
 module.exports = authJwt;

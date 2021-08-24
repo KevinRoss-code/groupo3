@@ -63,6 +63,8 @@ exports.delete = (req, res) => {
             id:id
         }
     }).then(num => {
+        try {
+            if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
         if(num == 1) {
             res.send({
                 message : "Commentaire bien supprimé"
@@ -72,6 +74,11 @@ exports.delete = (req, res) => {
                 message: `Impossible de trouver le commentaire ${id}`
             });
         }
+    }catch {
+        res.status(403).send({
+            message: "Acces Refuse"
+    })
+    }
     }).catch(err => {
         console.log(err)
         res.status(500).send({
@@ -96,6 +103,8 @@ exports.update = (req, res) => {
             id:id
         }
     }).then((num) => {
+        try{
+            if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
         if (num == 1) {
             res.send({
                 message: "Commentaire est bien modifié"
@@ -105,6 +114,11 @@ exports.update = (req, res) => {
                 message: `Impossible de modier le commentaire ${id}`
             })
         }
+    }catch{
+        res.status(403).send({
+            message: "Acces Refuse"
+    })
+    }
     }).catch(err => {
         console.log(err);
         res.status(500).send({
