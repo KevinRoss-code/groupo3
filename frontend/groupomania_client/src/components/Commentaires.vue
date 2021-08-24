@@ -4,15 +4,15 @@
     <div v-for="commentaire in commentaires" :key="commentaire">
       <div class="row border border-danger rounded" id="com">
         <div class="col-12">
-          {{commentaire.user.name}} {{commentaire.user.surname}}<br/>
+          {{commentaire.user.name}} {{commentaire.user.surname}}{{commentaire.user.id}}<br/>
       {{ commentaire.text }}<br />
       {{ commentaire.updatedAt }}
         </div>
       
       
       
-        <button v-on:click="showEditForm" class="modif btn btn-primary btn-lg">Modifier</button>
-        <button v-on:click="supprimerCom(commentaire.id)" class="btn btn-danger btn-lg">Supprimer</button>
+        <button v-on:click="showEditForm" class="modif btn btn-primary btn-lg" v-show="showButtomComEdit(commentaire.user.id)">Modifier</button>
+        <button v-on:click="supprimerCom(commentaire.id)" class="btn btn-danger btn-lg" v-show="showButtomComEdit(commentaire.user.id)">Supprimer</button>
         <form v-if="showForm === true" @submit="modifierCom(commentaire.id)">
           <div class="class row">
             <div class="class col-2"><label for="text" id="champs_text">text :</label></div>
@@ -32,19 +32,20 @@
 <script>
 import axios from "axios";
  import CommentaireForm from "./CommentaireForm.vue"
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
  export default { 
-   computed: {
-     
-   },
   components: {
     CommentaireForm
+  },
+  computed: {
+    ...mapState(['userId', "isAdmin"])
   },
   data() {
     return {
       articles: [],
       commentaire: [null],
       showForm: false,
+      showBouton: true,
     };
   },
   props: {
@@ -61,10 +62,25 @@ import { mapActions } from 'vuex';
       required: true,
     },
   },
-  
+  beforeMount() {
+    console.log("yo")
+      this.showBouton = this.showButtomComEdit();
+    },
   methods: {
     showEditForm() {
       this.showForm = true;
+    },
+    showButtomComEdit(id){
+                let userId = this.userId;
+                let isAdmin = this.isAdmin
+                // console.log(userId);
+                // console.log(id)
+                console.log("isUserPost", userId === id);
+                if((userId === id) || isAdmin){
+                  return this.showBouton = true;
+                 }else{
+                  return this.showBouton = false;
+                }
     },
     supprimerCom(id) {
       let token = localStorage.getItem("user");

@@ -1,12 +1,12 @@
 <template>
-  <div id="article">
-   <div class="border border-danger rounded">
+  <div>
+   <div class="border border-danger rounded" id="article">
 <img :src="article.imageUrl" alt="" class="rounded">
       <p>Titre : {{ article.title }}</p>
       <p>Contenu : {{ article.content }}</p>
-      <p>auteur : {{article.user.name}} {{article.user.surname}}</p>
+      <p>auteur : {{article.user.name}} {{article.user.surname}}{{article.user.id}}</p>
       
-      <button v-on:click="showEditForm" class="modif btn btn-primary btn-lg">Modifier</button>
+      <button  class="modif btn btn-primary btn-lg" v-show="showBouton">Modifier</button>
       <form v-if="showForm === true" @submit="modifier">
         <div class="row">
           <div class='col-2'>
@@ -25,7 +25,7 @@
         </div>
         <button class="btn btn-primary btn-lg">Enregistrer</button>
       </form>
-      <button v-on:click="supprimer" class="btn btn-danger btn-lg">Supprimer</button>
+      <button v-on:click="supprimer" class="btn btn-danger btn-lg" v-show="showBouton">Supprimer</button>
       <Commentaires
         :article="article.id"
         :commentaires="article.commentaires"
@@ -36,17 +36,23 @@
 
 <script>
 import axios from "axios";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import Commentaires from "@/components/Commentaires.vue";
+
 
 export default {
   components: {
     Commentaires,
+
+  },
+  computed: {
+    ...mapState(['userId', "isAdmin"])
   },
   data() {
     return {
       articles: [],
       showForm: false,
+      showBouton: true,
     };
   },
   props: {
@@ -63,25 +69,82 @@ export default {
       required: true,
     },
   },
+  beforeMount() {
+      // console.log("before mount");
+      this.showBouton = this.showButtomEdit();
+    },
   methods: {
+
+    
     showEditForm() {
       this.showForm = true;
     },
+    showButtomEdit(){
+     /* axios.get("http://localhost:3000/api/user",{
+              headers: {
+                "Content-type": "application/json",
+                "x-access-token": localStorage.getItem("user"),
+              },
+              }).then(res => res.data)
+              .then(user => {
+                
+                let userId = user.id;
+                console.log(userId)
+                let article = this.article.user.id;
+                console.log(article);
+                console.log("isUserPost", userId === article);
+                if(userId === article){
+                  return this.showBouton = true;
+                 }else{
+                  return this.showBouton = false;
+                }
+              })
+      
+      // let userId = user.id
+      // let article = this.article.user.id;
+      // console.log(user);
+      // console.log(article);
+      // if(user === article){
+      //   return this.showBouton = true;
+      // }else{
+      //   return this.showBouton = false;
+      // }
+
+      */
+
+                let userId = this.userId;
+                // console.log(userId)
+                let isAdmin = this.isAdmin
+                let article = this.article.user.id;
+                // console.log(article);
+                // console.log("isUserPost", userId === article);
+                if((userId === article )|| isAdmin){
+                  return this.showBouton = true;
+                 }else{
+                  return this.showBouton = false;
+                }
+    },
     modifier(e) {
       e.preventDefault();
-      let form = document.querySelector("form");
+      let form = e.target;
+      console.log(form);
       let formData = new FormData(form);
       formData.append("image", this.file);
+      console.log(this.file);
+      
+      console.log(formData.get("image"));
       let token = localStorage.getItem("user");
       console.log(token);
       let config = {
         headers: {
+          "Content-Type": "multipart/form-data",
           "x-access-token": `${token}`,
         },
       };
       let id = this.article.id;
+      
       axios
-        .put("http://localhost:3000/api/articles/" + `${id}`, formData, config)
+        .put(`http://localhost:3000/api/articles/${id}`, formData, config)
         .then((res) => {
           console.log(res.data);
           this.loadArticles();
@@ -90,6 +153,10 @@ export default {
           console.log(err);
           this.loadArticles();
         });
+    },
+    onChangeFileUpload() {
+      this.file = this.$refs.file.files[0];
+      console.log(this.file)
     },
     supprimer() {
       let token = localStorage.getItem("user");
@@ -112,10 +179,6 @@ export default {
           this.loadArticles();
         });
     },
-    onChangeFileUpload() {
-      this.file = this.$refs.file.files[0];
-      console.log(this.file)
-      },
     ...mapActions(["loadArticles"])
   },
 };
@@ -134,6 +197,7 @@ button{
 }
 #article{
   padding: 2%;
+  margin: 2%;
 }
 .border{
  background-color: #f28185;

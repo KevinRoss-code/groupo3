@@ -13,7 +13,7 @@
         <div class="class col-5">
           <input type="text" name="title" id="title" v-model="title" /><br />
           <input type="text" name="contenu" id="contenu" v-model="contenu"/><br />
-          <input type="file" id="file" ref="file" v-on:change="onChangeFileUpload()" />
+          <input type="file" id="file" ref="file" v-on:change="onChangeFile()" />
           <button class="btn btn-danger btn-lg">Poster</button>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default {
   
         });
     },
-    onChangeFileUpload() {
+    onChangeFile() {
       this.file = this.$refs.file.files[0];
       console.log(this.file)
     },

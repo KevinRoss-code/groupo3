@@ -28,7 +28,6 @@
       <div class="class row">
         <div class="class col-2"><label for="job" id="champ_job_connexion">Job :</label></div>
         <div class="class col-4"><input id="job_connexion" v-model="job" type="text" name="job" /></div>
-        <div class="class col-2"><input type="file" ref="file" v-on:change="onChangeFileUpload()"/></div>
         <div class="class col-3"><button class="btn btn-success btn-lg">Enregistrer</button></div>
       </div>
     </form>
@@ -65,7 +64,6 @@ export default {
                 e.preventDefault();
     let form = document.querySelector("form");
      const formData = new FormData(form);
-      formData.append('image', this.file);
       console.log(formData);
                 let token = localStorage.getItem('user');
                 console.log(token)
@@ -84,10 +82,6 @@ export default {
                      console.log(err)
                  })
             },
-            onChangeFileUpload(){
-              this.file = this.$refs.file.files[0];
-      console.log(this.file)
-            }
     },
 
 }

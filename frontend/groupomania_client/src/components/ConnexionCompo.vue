@@ -19,10 +19,13 @@
 
 <script>
 import axios from "axios";
+import {mapMutations} from "vuex";
 export default {
   name: "ConnexionCompo",
 
   methods: {
+     ...mapMutations(['SET_User_Id', "SET_Is_Admin"]),
+
     login(e) {
       e.preventDefault();
       let form = document.querySelector("form");
@@ -31,7 +34,6 @@ export default {
         email: formData.get("email"),
         password: formData.get("password"),
       };
-      console.log(data);
       axios
         .post("http://localhost:3000/api/auth/login", data, {
           headers: {
@@ -41,6 +43,8 @@ export default {
         .then((res) => {
           console.log(res.data);
           localStorage.setItem("user", res.data.accessToken);
+          this.SET_User_Id(res.data.id);
+          this.SET_Is_Admin(res.data.isAdmin);
           this.$router.push({ path: "MurAppli" });
         })
         .catch((err) => {
@@ -48,6 +52,7 @@ export default {
         });
       //this.$router.push({ path: "MurAppli" });
     },
+   
   },
 };
 </script>
