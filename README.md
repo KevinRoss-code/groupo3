@@ -7,4 +7,4 @@
       ==============================================
  
 # Pour le client faire npm install dans le terminal
-# Excuter la commande "npm run serve" pour lancer le serveur
+# Executer la commande "npm run serve" pour lancer le serveur
