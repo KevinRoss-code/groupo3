@@ -3,6 +3,9 @@
     <button class="btn btn-primary btn-lg" @click="profil">
       Voir le profil
     </button>
+    <button class="btn btn-danger btn-lg" @click="deconnexion">
+      Déconnexion
+    </button>
     <form class="border border-danger rounded" style="background-color:#f4898d" @submit="envoi">
       <p>Votre article ici : </p>
       <div class="class row">
@@ -76,6 +79,10 @@ export default {
     },
     profil() {
       this.$router.push({ path: "Profil" });
+    },
+    deconnexion(){
+      localStorage.clear()
+      this.$router.push({path: "Connexion"})
     },
     ...mapActions(["loadArticles"]),
   },

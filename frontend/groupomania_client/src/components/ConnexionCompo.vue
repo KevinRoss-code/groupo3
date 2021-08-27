@@ -9,7 +9,7 @@
         </div>
         <div class="col-6">
           <input id="email" v-model="email" type="text" name="email" />
-          <input id="password" v-model="password" type="text" name="password" />
+          <input id="password" v-model="password" type="password" name="password" />
         </div>
       </div>
         <button class="btn btn-danger btn-lg">Connexion</button>

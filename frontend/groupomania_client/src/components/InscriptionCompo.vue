@@ -14,11 +14,14 @@
            <input id="name_connexion" v-model="name" type="text" name="name" /><br/>
           <input id="surname_connexion" v-model="surname" type="text" name="surname" /><br/>
         <input id="email_connexion" v-model="email" type="text" name="email" /><br/>
-      <input id="password_connexion" v-model="password" type="text" name="password" /><br/>
+      <input id="password_connexion" v-model="password" type="password" name="password" /><br/>
       <input id="job_connexion" v-model="job" type="text" name="job" />
         </div>
       </div>
         <button id="push_connexion" class="btn btn-danger btn-lg">Inscription</button>
+        <div id="error">
+
+        </div>
     </form>
   </div>
 </template>
@@ -27,12 +30,15 @@
 
 <script>
 import axios from "axios";
+import {mapMutations} from "vuex";
 export default {
   name: "InscriptionCompo",
   props: {
     msg: String,
   },
   methods: {
+     ...mapMutations(['SET_User_Id', "SET_Is_Admin"]),
+
     inscription(e) {
       e.preventDefault();
       let form = document.querySelector("form");
@@ -53,11 +59,32 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
+          localStorage.setItem("user", res.data.accessToken);
+          this.SET_User_Id(res.data.id);
+          this.SET_Is_Admin(res.data.isAdmin);
+          this.$router.push({ path: "MurAppli" });
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(error => {
+          if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      document.querySelector("#error").textContent = error.response.data.error;
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message);
+    }
+    console.log(error.config);
+
         });
-      this.$router.push({ path: "MurAppli" });
+     
     },
   },
 };
