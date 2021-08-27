@@ -7,24 +7,9 @@ const fs = require('fs');
 
 
 exports.create = (req, res) => {
-    // const imageObject = JSON.parse(req.body.image);
-    // delete imageObject._id;
-    /*const image = new Image({
-        ...imageObject,
-        imageUrl : `${req.protocol}: //${req.get('host')}/images/${req.file.filename}`
-    })
-    image.save()
-    .then(() => res.status(201).json({message: 'image enregistrée'} ))
-    .catch(err => res.status(400).json({err}));
-    if(!req.body.title){
-        res.status(400).send({
-            message: "titre vide"
-        });
-        return;
-    }*/
     let userId = req.userId;
     const article = {
-        
+
         title: req.body.title,
         content: req.body.contenu,
         userId: userId,
@@ -33,16 +18,16 @@ exports.create = (req, res) => {
     };
 
     Article.create(article)
-    .then((article) => {
-        console.log(`>> Article crée ${JSON.stringify(article, null, 4)}`);
+        .then((article) => {
+            console.log(`>> Article crée ${JSON.stringify(article, null, 4)}`);
 
-        res.send(article);
-    }).catch((err) => {
-        console.log(">>Erreur lors de la création de l'article:" + err);
-        res.status(500).send({
-            message: err.message
-        })
-    });
+            res.send(article);
+        }).catch((err) => {
+            console.log(">>Erreur lors de la création de l'article:" + err);
+            res.status(500).send({
+                message: err.message
+            })
+        });
 }
 
 exports.findAll = (req, res) => {
@@ -53,10 +38,10 @@ exports.findAll = (req, res) => {
         }
     } : null;
     Article.findAll({
-        where: condition, 
+        where: condition,
         include: [{
-          all: true,
-          nested: true
+            all: true,
+            nested: true
         }],
         order: [
             ['id', 'DESC']
@@ -103,107 +88,80 @@ exports.update = (req, res) => {
     const id = req.params.id;
     console.log(req.body)
     const article = {
-        
+
         title: req.body.title,
         content: req.body.contenu,
         id: req.params.id,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        
+
     };
     console.log(req.body)
-    Article.findOne({ where: {id: id} }).then(function(article) {
+    Article.findOne({ where: { id: id } }).then(function (article) {
         // console.log(article);
-        });
+    });
 
     Article.update(article, {
         where: {
-            id:id
+            id: id
         }
     }).then((num) => {
         try {
-            if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
-        if (num == 1) {
-            res.send({
-                message: "Article est bien modifié"
-            });
-        }else{
-            res.send({
-                message: `Impossible de modier l'article ${id}`
+            if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
+            if (num == 1) {
+                res.send({
+                    message: "Article est bien modifié"
+                });
+            } else {
+                res.send({
+                    message: `Impossible de modier l'article ${id}`
+                })
+            }
+        } catch {
+            res.status(403).send({
+                message: "Acces Refuse"
             })
         }
-    }catch{
-        res.status(403).send({
-            message: "Acces Refuse"
-    })
-}   
     }).catch(err => {
         console.log(err);
         res.status(500).send({
             message: "Erreur lors de la modification" + id
         });
-        
+
     });
 };
 
 exports.delete = (req, res) => {
     const id = req.params.id;
     Article.findByPk(id)
-    .then(article => {
-        try {
-
-      
-        if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
-
-        if(article.imageUrl){
-            const filename = article.imageUrl.split("/images")[1];
-            fs.unlink(`images/${filename}`, () => {
-                Article.destroy({ where: {id: id} }).then(num => {
-        
-                    if(num == 1) {
-                        res.send({
-                            message : "Article bien supprimé"
+        .then(article => {
+            try {
+                if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
+                if (article.imageUrl) {
+                    const filename = article.imageUrl.split("/images")[1];
+                    fs.unlink(`images/${filename}`, () => {
+                        Article.destroy({ where: { id: id } }).then(num => {
+                            if (num == 1) {
+                                res.send({
+                                    message: "Article bien supprimé"
+                                });
+                            } else {
+                                res.send({
+                                    message: `Impossible de trouver l'article ${id}`
+                                });
+                            }
+                        }).catch(err => {
+                            res.status(500).send({
+                                message: "erreur lors de la suppression" + id
+                            });
                         });
-                    }else{
-                        res.send({
-                            message: `Impossible de trouver l'article ${id}`
-                        });
-                    }
-                }).catch(err => {
-                    res.status(500).send({
-                        message: "erreur lors de la suppression" + id
-                    });
+                    })
+                }
+            } catch {
+                res.status(403).send({
+                    message: "Acces Refuse"
                 });
-            })
-        } 
-    }catch  {
-        res.status(403).send({
-            message: "Acces Refuse"
-        });
-    }
-    })
-    
-    /*
-    Article.destroy({
-        where: {
-            id:id
-        }
-        
-    }).then(num => {
-        
-        if(num == 1) {
-            res.send({
-                message : "Article bien supprimé"
-            });
-        }else{
-            res.send({
-                message: `Impossible de trouver l'article ${id}`
-            });
-        }
-    }).catch(err => {
-        res.status(500).send({
-            message: "erreur lors de la suppression" + id
-        });
-    });*/
+            }
+        })
 };
 
 exports.deleteAll = (req, res) => {

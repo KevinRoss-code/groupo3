@@ -49,12 +49,5 @@ db.commentaires.belongsTo(db.users, {
   as: 'user',
 });
 
-// db.users.hasMany(db.role, {as: 'role'});
-// db.role.belongsTo(db.users, {
-//   foreignKey: "userId",
-//   as: "roleId"
-// });
-
-// db.ROLES = ["user", "admin"];
 
 module.exports = db;

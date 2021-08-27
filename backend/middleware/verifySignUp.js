@@ -9,7 +9,7 @@ valid = (req, res, next) => {
     const passwordSchema = new passwordValidator();
     passwordSchema
     .is().min(8)
-  .is().min(30)
+  .is().max(30)
   .has().uppercase()
   .has().lowercase()
   .has().digits(2)
@@ -29,10 +29,10 @@ valid = (req, res, next) => {
   };
 
   checkUser = (req, res, next) => {
-      const regex = /^[a-zA-Z0-9_]{3, 30}$/;
+      const regex = /^[a-zA-Z0-9_]{3,30}$/;
       const name = req.body.name;
       const surname = req.body.surname;
-      if(regex.test(name) === true && regex.test(surname) === true) {
+      if(regex.test(name)  && regex.test(surname)) {
           next();
       }else {
           return res.status(400).send({

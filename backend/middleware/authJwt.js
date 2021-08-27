@@ -29,8 +29,6 @@ authorized = (req, res, next) =>{
         next();
     })
 }
-
-
 const authJwt = {
     verifyToken: verifyToken,
     authorized: authorized

@@ -10,75 +10,74 @@ exports.create = (req, res) => {
         articleId: articleId,
     };
     Commentaire.create(commentaire)
-    .then((commentaire) => {
-        console.log(`>> commentaire crée ${JSON.stringify(commentaire, null, 4)}`);
-        res.send(commentaire);
-    }).catch((err) => {
-        console.log(">>Erreur lors de la création du commentaire:" + err);
-        res.status(500).send({
-            message: err.message
-        })
-    });
+        .then((commentaire) => {
+            console.log(`>> commentaire crée ${JSON.stringify(commentaire, null, 4)}`);
+            res.send(commentaire);
+        }).catch((err) => {
+            console.log(">>Erreur lors de la création du commentaire:" + err);
+            res.status(500).send({
+                message: err.message
+            })
+        });
 
 };
 exports.findAll = (req, res) => {
- const text = req.body.text;
- let condition = text ? {
-     text: {
-         [Op.like]: `%${text}%`
-     }
- } : null;
- Commentaire.findAll({
-     where: condition,
-     include: [{
-         all: true,
-         nested: true
-     }],
-     order: [
-        ['id', 'DESC']
-    ]
-}).then(data => {
-    res.send(data);
-}).catch(err => {
-    res.status(500).send({
-        message: err.message
+    const text = req.body.text;
+    let condition = text ? {
+        text: {
+            [Op.like]: `%${text}%`
+        }
+    } : null;
+    Commentaire.findAll({
+        where: condition,
+        include: [{
+            all: true,
+            nested: true
+        }],
+        order: [
+            ['id', 'DESC']
+        ]
+    }).then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message
+        });
     });
-});
 };
 
-exports.findById =(id) => {
+exports.findById = (id) => {
     return Commentaire.findByPk(id, { include: ['article'] })
-    .then((commentaire) => {
-        return commentaire;
-    }).catch((err) => {
-        console.log("Erreur impossible de voir le commentaire " + err);
-    });
+        .then((commentaire) => {
+            return commentaire;
+        }).catch((err) => {
+            console.log("Erreur impossible de voir le commentaire " + err);
+        });
 };
 
 exports.delete = (req, res) => {
     const id = req.params.id;
-
     Commentaire.destroy({
         where: {
-            id:id
+            id: id
         }
     }).then(num => {
         try {
-            if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
-        if(num == 1) {
-            res.send({
-                message : "Commentaire bien supprimé"
-            });
-        }else{
-            res.send({
-                message: `Impossible de trouver le commentaire ${id}`
-            });
+            if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
+            if (num == 1) {
+                res.send({
+                    message: "Commentaire bien supprimé"
+                });
+            } else {
+                res.send({
+                    message: `Impossible de trouver le commentaire ${id}`
+                });
+            }
+        } catch {
+            res.status(403).send({
+                message: "Acces Refuse"
+            })
         }
-    }catch {
-        res.status(403).send({
-            message: "Acces Refuse"
-    })
-    }
     }).catch(err => {
         console.log(err)
         res.status(500).send({
@@ -90,40 +89,38 @@ exports.delete = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     const commentaire = {
-        
         text: req.body.data.text,
         id: req.params.id
     };
     console.log(req.body)
-    Commentaire.findOne({ where: {id: id} }).then(function(commentaire) {
-        });
+    Commentaire.findOne({ where: { id: id } }).then(function (commentaire) {
+    });
 
     Commentaire.update(commentaire, {
         where: {
-            id:id
+            id: id
         }
     }).then((num) => {
-        try{
-            if(!req.isAdmin && article.userId !== req.userId) {throw new Error("Don't have access")}
-        if (num == 1) {
-            res.send({
-                message: "Commentaire est bien modifié"
-            });
-        }else{
-            res.send({
-                message: `Impossible de modier le commentaire ${id}`
+        try {
+            if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
+            if (num == 1) {
+                res.send({
+                    message: "Commentaire est bien modifié"
+                });
+            } else {
+                res.send({
+                    message: `Impossible de modier le commentaire ${id}`
+                })
+            }
+        } catch {
+            res.status(403).send({
+                message: "Acces Refuse"
             })
         }
-    }catch{
-        res.status(403).send({
-            message: "Acces Refuse"
-    })
-    }
     }).catch(err => {
         console.log(err);
         res.status(500).send({
             message: "Erreur lors de la modification" + id
         });
-        
     });
 };
