@@ -4,7 +4,9 @@ Pour son installation :
 
 Dans un premier temps il vous faut lancer une application comme MAMP qui vous permettra d'accèder à la base de données.
 
-Puis depuis le terminal dans le dossier backend faire un _"npm install"_ et taper la commande _"nodemon server"_ pour lancer le serveur.
+Puis depuis le terminal dans le dossier backend faire un _"npm install"_ .
+
+Il vous faut ensuite installer nodemon avec la commande _"npm install -g nodemon"_ après vous pouvez lancer le server en tapant _"nodemon server"_
 
 Le serveur sera écouté sur le port : "http://localhost:3000/"
 
