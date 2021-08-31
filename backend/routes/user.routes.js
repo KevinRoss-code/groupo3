@@ -1,6 +1,6 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller");
-const multer = require('../middleware/multer-config');
+
 
 module.exports = app => {
 
@@ -8,7 +8,7 @@ module.exports = app => {
 
    router.get("/",[authJwt.verifyToken], controller.findById);
 
-  router.put("/:id", [authJwt.verifyToken], multer, controller.update);
+  router.put("/:id", [authJwt.verifyToken], controller.update);
 
   router.delete("/:id", [authJwt.verifyToken],controller.delete);
 

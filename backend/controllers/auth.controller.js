@@ -21,10 +21,7 @@ exports.signup = (req, res) => {
           message: "element manquant"
         });
       } else {
-        this.login(req, res)
-        // return res.status(200).send({
-        //   message: "utilisateur crée"
-        // });
+        this.login(req, res);
       }
     })
     .catch(err => {

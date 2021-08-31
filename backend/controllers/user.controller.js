@@ -21,12 +21,11 @@ exports.findById = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
   const user = {
-    name: req.body.data.name,
-    surname: req.body.data.surname,
-    email: req.body.data.email,
-    password: bcrypt.hashSync(req.body.data.password, 8),
+    name: req.body.name,
+    surname: req.body.surname,
+    email: req.body.email,
     job: req.body.data.job,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   };
   console.log(req.body)
   User.findOne({ where: { id: id } }).then(function (user) {

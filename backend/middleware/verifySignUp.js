@@ -30,8 +30,8 @@ valid = (req, res, next) => {
 
   checkUser = (req, res, next) => {
       const regex = /^[a-zA-Z0-9_]{3,30}$/;
-      const name = req.body.name;
-      const surname = req.body.surname;
+      const name = req.body.name.match(regex);
+      const surname = req.body.surname.match(regex);
       if(regex.test(name)  && regex.test(surname)) {
           next();
       }else {

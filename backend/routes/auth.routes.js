@@ -13,8 +13,7 @@ module.exports = function(app) {
   });
 
   app.post(
-    "/api/auth/signup", [verifySignUp.userExisteDeja, 
-      verifySignUp.checkUser, verifySignUp.valid], multer, controller.signup);
+    "/api/auth/signup", [verifySignUp.userExisteDeja, verifySignUp.checkUser, verifySignUp.valid], multer, controller.signup);
 
   app.post("/api/auth/login", [verifySignUp.valid], controller.login);
 };
