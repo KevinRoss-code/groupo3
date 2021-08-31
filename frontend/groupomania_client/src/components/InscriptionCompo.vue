@@ -50,7 +50,6 @@ export default {
         password: formData.get("password"),
         job: formData.get("job"),
       };
-      console.log(data);
       axios
         .post("http://localhost:3000/api/auth/signup", data, {
           headers: {

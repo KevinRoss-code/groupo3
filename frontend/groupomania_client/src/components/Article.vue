@@ -5,11 +5,10 @@
       <p>Titre : {{ article.title }}</p>
       <p>Contenu : {{ article.content }}</p>
       <p>
-        auteur : {{ article.user.name }} {{ article.user.surname
-        }}{{ article.user.id }}
+        auteur : {{ article.user.name }} {{ article.user.surname }}
       </p>
 
-      <button class="modif btn btn-primary btn-lg" v-show="showBouton">
+      <button button v-on:click="showEditForm" class="modif btn btn-primary btn-lg" v-show="showBouton">
         Modifier
       </button>
       <form v-if="showForm === true" @submit="modifier">

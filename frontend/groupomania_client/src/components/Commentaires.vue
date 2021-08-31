@@ -4,9 +4,8 @@
     <div v-for="commentaire in commentaires" :key="commentaire">
       <div class="row border border-danger rounded" id="com">
         <div class="col-12">
-          {{commentaire.user.name}} {{commentaire.user.surname}}{{commentaire.user.id}}<br/>
+          {{commentaire.user.name}} {{commentaire.user.surname}}<br/>
       {{ commentaire.text }}<br />
-      {{ commentaire.updatedAt }}
         </div>
       
       
@@ -105,7 +104,6 @@ import { mapActions, mapState } from 'vuex';
     modifierCom(id) {
       let data = {
         text: this.text,
-        articleId: '1',
       };
       console.log(data);
       let token = localStorage.getItem("user");
