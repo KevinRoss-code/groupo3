@@ -10,16 +10,15 @@
       
       
       
-        <button v-on:click="showEditForm" class="modif btn btn-primary btn-lg" v-show="showButtomComEdit(commentaire.user.id)">Modifier</button>
-        <button v-on:click="supprimerCom(commentaire.id)" class="btn btn-danger btn-lg" v-show="showButtomComEdit(commentaire.user.id)">Supprimer</button>
-        <form v-if="showForm === true" @submit="modifierCom(commentaire.id)">
+        <button v-on:click="(event) => showEditForm(event.target)" :data-id="commentaire.id" class="modif btn btn-primary btn-lg" v-show="showButtomComEdit(commentaire.user.id)">Modifier</button>
+        <form v-if="(showForm === true) && (idComment == commentaire.id)" @submit="(e) => modifierCom(e, commentaire.id)">
           <div class="class row">
             <div class="class col-2"><label for="text" id="champs_text">text :</label></div>
             <div class="class col-5"><input type="text" name="text" id="text" v-model="text" /></div>
-            <div class="class col-3"><button class="btn btn-success btn-lg">Enregistrer</button></div>
+            <div class="class col-3"><button class="btn btn-success">Enregistrer</button></div>
           </div>
         </form>
-       
+       <button v-on:click="supprimerCom(commentaire.id)" class="btn btn-danger btn-lg" v-show="showButtomComEdit(commentaire.user.id)">Supprimer</button>
       </div>
     </div>
     
@@ -45,6 +44,7 @@ import { mapActions, mapState } from 'vuex';
       commentaire: [null],
       showForm: false,
       showBouton: true,
+      idComment: 0
     };
   },
   props: {
@@ -66,8 +66,11 @@ import { mapActions, mapState } from 'vuex';
       this.showBouton = this.showButtomComEdit();
     },
   methods: {
-    showEditForm() {
-      this.showForm = true;
+    showEditForm(target) {
+
+       this.showForm = true;
+       this.idComment = target.dataset.id;
+       console.log(target.dataset.id)
     },
     showButtomComEdit(id){
                 let userId = this.userId;
@@ -82,6 +85,7 @@ import { mapActions, mapState } from 'vuex';
                 }
     },
     supprimerCom(id) {
+     
       let token = localStorage.getItem("user");
       console.log(token);
       let config = {
@@ -101,7 +105,8 @@ import { mapActions, mapState } from 'vuex';
            this.loadArticles();
         });
     },
-    modifierCom(id) {
+    modifierCom(e, id) {
+      e.preventDefault();
       let data = {
         text: this.text,
       };
