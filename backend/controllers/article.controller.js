@@ -96,17 +96,17 @@ exports.update = (req, res) => {
 
     };
     console.log(req.body)
+    try {
     Article.findOne({ where: { id: id } }).then(function (article) {
         // console.log(article);
+        if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
     });
-
     Article.update(article, {
         where: {
             id: id
         }
     }).then((num) => {
-        try {
-            if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
+
             if (num == 1) {
                 res.send({
                     message: "Article est bien modifié"
@@ -116,11 +116,7 @@ exports.update = (req, res) => {
                     message: `Impossible de modier l'article ${id}`
                 })
             }
-        } catch {
-            res.status(403).send({
-                message: "Acces Refuse"
-            })
-        }
+        
     }).catch(err => {
         console.log(err);
         res.status(500).send({
@@ -128,6 +124,11 @@ exports.update = (req, res) => {
         });
 
     });
+} catch {
+    res.status(403).send({
+        message: "Acces Refuse"
+    })
+}
 };
 
 exports.delete = (req, res) => {

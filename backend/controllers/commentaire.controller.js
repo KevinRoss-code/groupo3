@@ -56,34 +56,38 @@ exports.findById = (id) => {
 };
 
 exports.delete = (req, res) => {
+
     const id = req.params.id;
-    Commentaire.destroy({
-        where: {
-            id: id
-        }
-    }).then(num => {
-        try {
-            if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
-            if (num == 1) {
-                res.send({
-                    message: "Commentaire bien supprimé"
+    try {
+        Commentaire.findByPk(id).then(commentaire => {
+            if (!req.isAdmin && commentaire.userId !== req.userId) { throw new Error("Don't have access") }
+            Commentaire.destroy({
+                where: {
+                    id: id
+                }
+            }).then(num => {   
+                    if (num == 1) {
+                        res.send({
+                            message: "Commentaire bien supprimé"
+                        });
+                    } else {
+                        res.send({
+                            message: `Impossible de trouver le commentaire ${id}`
+                        });
+                    }
+            }).catch(err => {
+                console.log(err)
+                res.status(500).send({
+                    message: "erreur lors de la suppression" + id
                 });
-            } else {
-                res.send({
-                    message: `Impossible de trouver le commentaire ${id}`
-                });
-            }
-        } catch {
-            res.status(403).send({
-                message: "Acces Refuse"
-            })
-        }
-    }).catch(err => {
-        console.log(err)
-        res.status(500).send({
-            message: "erreur lors de la suppression" + id
-        });
-    });
+            });
+        })
+    
+} catch {
+    res.status(403).send({
+        message: "Acces Refuse"
+    })
+}
 };
 
 exports.update = (req, res) => {
@@ -93,7 +97,9 @@ exports.update = (req, res) => {
         id: req.params.id
     };
     console.log(req.body)
+    try {
     Commentaire.findOne({ where: { id: id } }).then(function (commentaire) {
+        if (!req.isAdmin && commentaire.userId !== req.userId) { throw new Error("Don't have access") }
     });
 
     Commentaire.update(commentaire, {
@@ -101,9 +107,7 @@ exports.update = (req, res) => {
             id: id
         }
     }).then((num) => {
-        try {
-            if (!req.isAdmin && article.userId !== req.userId) { throw new Error("Don't have access") }
-            if (num == 1) {
+        if (num == 1) {
                 res.send({
                     message: "Commentaire est bien modifié"
                 });
@@ -112,15 +116,16 @@ exports.update = (req, res) => {
                     message: `Impossible de modier le commentaire ${id}`
                 })
             }
-        } catch {
-            res.status(403).send({
-                message: "Acces Refuse"
-            })
-        }
+        
     }).catch(err => {
         console.log(err);
         res.status(500).send({
             message: "Erreur lors de la modification" + id
         });
     });
+} catch {
+    res.status(403).send({
+        message: "Acces Refuse"
+    })
+}
 };
