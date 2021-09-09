@@ -15,7 +15,7 @@
           <div class="class row">
             <div class="class col-2"><label for="text" id="champs_text">text :</label></div>
             <div class="class col-5"><input type="text" name="text" id="text" v-model="text" /></div>
-            <div class="class col-3"><button class="btn btn-success">Enregistrer</button></div>
+            <div class="class col-3"><button class="btn btn-success" id="boutonEnregistrer">Enregistrer</button></div>
           </div>
         </form>
        <button v-on:click="supprimerCom(commentaire.id)" class="btn btn-danger btn-lg" v-show="showButtomComEdit(commentaire.user.id)">Supprimer</button>
@@ -139,6 +139,9 @@ import { mapActions, mapState } from 'vuex';
 };
 </script>
 <style scoped>
+#boutonEnregistrer{
+  margin-left: 150%;
+}
 #com{
   font-size: 1.5rem;
   text-align: center;
